@@ -1,0 +1,55 @@
+expression  = statistical
+
+statistical = RVALUE
+            | Max(RVALUE, RVALUE)
+            | Min(RVALUE, RVALUE)
+            | Mean(RVALUE, RVALUE)
+            | Sum(RVALUE, RVALUE)
+            | logical
+
+logical     = logical && equals
+            = logical || equals
+            = equals
+
+equals      = equals == relational
+            | equals != relational
+            | relational
+
+relational  = relational < bitcomp
+            | relational <= bitcomp
+            | relational > bitcomp
+            | relational >= bitcomp
+            | bitcomp
+
+bitcomp     = bitcomp & bitshift
+            | bitcomp | bitshift
+            | bitcomp ^ bitshift
+            | bitshift
+
+bitshift    = bitshift << sum
+            | bitshift >> sum
+            | sum
+
+sum         = sum + product
+            | sum - product
+            | product
+
+product     = product * unary
+            | product / unary
+            | product % unary
+            | unary
+
+unary       = !casting
+            | ~casting
+            | casting
+
+casting     = (float) atom
+            | (int) atom
+            | atom
+
+atom        = INT
+            | FLOAT
+            | BOOL
+            | STRING
+            | LVALUE
+            | (expression)
