@@ -1,10 +1,10 @@
 expression  = statistical
 
 statistical = RVALUE
-            | Max(RVALUE, RVALUE)
-            | Min(RVALUE, RVALUE)
-            | Mean(RVALUE, RVALUE)
-            | Sum(RVALUE, RVALUE)
+            | Max(LVALUE, LVALUE)
+            | Min(LVALUE, LVALUE)
+            | Mean(LVALUE, LVALUE)
+            | Sum(LVALUE, LVALUE)
             | logical
 
 logical     = logical && equals
