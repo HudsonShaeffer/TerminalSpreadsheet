@@ -4,10 +4,16 @@ include Token
 module Lexer
     def lex(expression)
         # Check if current character is a digit.
-        is_digit = ->(char) { char === /\d/ }
+        is_digit = ->(char) { 
+            i += 1
+            char === /\d/ 
+        }
 
         # Check if the current character is a character (ignoring case)
-        is_char = ->(char) { char === /[a-z]/i }
+        is_char = ->(char) { 
+            i += 1
+            char === /[a-z]/i 
+        }
 
         # Add current character to token and move along.
         def capture() 
