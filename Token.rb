@@ -23,6 +23,6 @@ end
 :multiply       | :mean                 | :logical_not
 :divide         | :sum                  |
 :modulo         |                       |
-# Casting       |                       |
-:float_int_cast |                       |
+# Casting       | # Invalid             |
+:float_int_cast | :invalid_token        |
 :int_float_cast |                       |

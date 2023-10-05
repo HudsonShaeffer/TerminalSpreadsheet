@@ -3,24 +3,11 @@ include Token
 
 module Lexer
     def lex(expression)
-        i = 0;
-        tokenSoFar = '';
-        tokens = [];
-
-        # Check if current character is target.
-        def has(target) 
-            i < expression.length && expression[i] === target;
-        end
-
-        # Check if current character is not target.
-        def hasNot(target) 
-            i < expression.length && expression[i] !== target;
-        end
-
         # Check if current character is a digit.
-        def hasDigit() 
-            i < expression.length && '0' <= expression[i] && expression[i] <= '9';
-        end
+        is_digit = ->(char) { char === /\d/ }
+
+        # Check if the current character is a character (ignoring case)
+        is_char = ->(char) { char === /[a-z]/i }
 
         # Add current character to token and move along.
         def capture() 
@@ -45,6 +32,24 @@ module Lexer
             tokenSoFar = '';
         end
 
+        # remove carriage returns (if any)
+        while (expression.chomp! != nil); end
 
+        # loop variables
+        i = 0;
+        token_type = :invalid_token
+        token_source = '';
+        start_index = end_index = -1;
+        tokens = [];
+
+        while (i < expression.length)
+            case expression[i]
+            when 
+            when
+            else
+            end
+        end
+
+        tokens
     end
 end
