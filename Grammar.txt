@@ -1,11 +1,4 @@
-expression  = statistical
-
-statistical = RVALUE
-            | Max(LVALUE, LVALUE)
-            | Min(LVALUE, LVALUE)
-            | Mean(LVALUE, LVALUE)
-            | Sum(LVALUE, LVALUE)
-            | logical
+expression  = logical
 
 logical     = logical && equals
             = logical || equals
@@ -52,4 +45,9 @@ atom        = INT
             | BOOL
             | STRING
             | LVALUE
+            | RVALUE
+            | Max(LVALUE, LVALUE)
+            | Min(LVALUE, LVALUE)
+            | Mean(LVALUE, LVALUE)
+            | Sum(LVALUE, LVALUE)
             | (expression)
