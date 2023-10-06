@@ -19,38 +19,6 @@ module Lexer
             $i += 1
         end
 
-        # Helper method to reduce clutter in statistical function lexing
-        def capture_lvalue
-            if is_ampersand? # ----------------------------- Lvalue Branch
-                capture
-                if is_open_bracket? # munch open bracket
-                    capture
-                    while is_whitespace?; skip; end # munch variable amount of whitespace [ num
-                    if is_digit? # munch first x value digit
-                        capture
-                        while is_digit? # munch rest x digits
-                            capture
-                        end
-                        while is_whitespace?; skip; end # munch variable amount of whitespace num ,
-                        if is_comma? # munch comma delimiter
-                            capture
-                            while is_whitespace?; skip; end # munch variable amount of whitespace , num
-                            if is_digit? # munch first y value digit
-                                capture
-                                while is_digit? # munch rest y digits
-                                    capture
-                                end
-                                while is_whitespace?; skip; end # munch variable amount of whitespace num ]
-                                if is_close_bracket? # munch close bracket
-                                    capture
-                                else; abandon; end
-                            else; abandon; end
-                        else; abandon; end
-                    else; abandon; end
-                else; abandon; end
-            end
-        end
-
         # Ignore character, reset token.
         def abandon
             $i += 1
@@ -71,35 +39,41 @@ module Lexer
             $token_source = ''
         end
         
-        # Check if current character is a valid boolean char.
-        def is_first_true?; $i < $expression.length && $expression[$i] === "t"; end; # true
-        def is_second_true?; $i < $expression.length && $expression[$i] === "r"; end;
-        def is_third_true?; $i < $expression.length && $expression[$i] === "u"; end;
-        def is_fourth_true?; $i < $expression.length && $expression[$i] === "e"; end;
-        def is_first_false?; $i < $expression.length && $expression[$i] === "f"; end; # false
-        def is_second_false?; $i < $expression.length && $expression[$i] === "a"; end;
-        def is_third_false?; $i < $expression.length && $expression[$i] === "l"; end;
-        def is_fourth_false?; $i < $expression.length && $expression[$i] === "s"; end;
-        def is_fifth_false?; $i < $expression.length && $expression[$i] === "e"; end;
+        # Check if current character is a valid boolean char
+        def is_true_t?; $i < $expression.length && $expression[$i] == "t"; end; # true
+        def is_true_r?; $i < $expression.length && $expression[$i] == "r"; end;
+        def is_true_u?; $i < $expression.length && $expression[$i] == "u"; end;
+        def is_true_e?; $i < $expression.length && $expression[$i] == "e"; end;
+        def is_false_f?; $i < $expression.length && $expression[$i] == "f"; end; # false
+        def is_false_a?; $i < $expression.length && $expression[$i] == "a"; end;
+        def is_false_l?; $i < $expression.length && $expression[$i] == "l"; end;
+        def is_false_s?; $i < $expression.length && $expression[$i] == "s"; end;
+        def is_false_e?; $i < $expression.length && $expression[$i] == "e"; end;
+
+        # Check if current character is a valid statistical char
+        def is_m?; $i < $expression.length && ($expression[$i] == "m" || $expression[$i] == "M"); end; 
+        def is_a?; $i < $expression.length && ($expression[$i] == "a" || $expression[$i] == "A"); end; 
+        def is_x?; $i < $expression.length && ($expression[$i] == "x" || $expression[$i] == "X"); end; 
+        def is_e?; $i < $expression.length && ($expression[$i] == "e" || $expression[$i] == "E"); end; 
+        def is_i?; $i < $expression.length && ($expression[$i] == "i" || $expression[$i] == "I"); end; 
+        def is_n?; $i < $expression.length && ($expression[$i] == "n" || $expression[$i] == "N"); end; 
+        def is_u?; $i < $expression.length && ($expression[$i] == "u" || $expression[$i] == "U"); end; 
+        def is_s?; $i < $expression.length && ($expression[$i] == "s" || $expression[$i] == "S"); end; 
         
         # Check if current character is a digit, dot, or comma
         def is_digit?; $i < $expression.length && "0" <= $expression[$i] && $expression[$i] <= "9"; end;
         def is_decimal?; $i < $expression.length && $expression[$i] == "."; end;
         def is_comma?; $i < $expression.length && $expression[$i] == ","; end;
 
-        # Check if the current character is a quote
-        def is_quote?; $i < $expression.length && $expression[$i] == '"'; end;
-        
-        # Check if the current character is an ampersand
-        def is_ampersand?; $i < $expression.length && $expression[$i] == '&'; end;
-        
         # Check if the current character is an open bracket, close bracket, open parenthesis, or close parenthesis
         def is_open_bracket?; $i < $expression.length && $expression[$i] == '['; end;
         def is_close_bracket?; $i < $expression.length && $expression[$i] == ']'; end;
         def is_open_parenthesis?; $i < $expression.length && $expression[$i] == '('; end;
         def is_close_parenthesis?; $i < $expression.length && $expression[$i] == ')'; end;
 
-        # Check if the current character is a whitespace
+        # Check if the current character is a delimiter
+        def is_ampersand?; $i < $expression.length && $expression[$i] == '&'; end;
+        def is_quote?; $i < $expression.length && $expression[$i] == '"'; end;
         def is_whitespace?; $i < $expression.length && $expression[$i] == " "; end;
         def is_end_of_line?; !($i < $expression.length); end;
 
@@ -124,6 +98,7 @@ module Lexer
                 $start_index = $i
                 capture
                 while is_digit? # munch all consecutive digits
+                    $end_index = $i
                     capture
                 end
                 if is_decimal? # ------------------- Floats SubBranch
@@ -135,51 +110,44 @@ module Lexer
                     end
                     $token_type = :float
                     emitToken # emit float token
-                elsif is_end_of_line? || is_whitespace? # ------------- Integer SubBranch
-                    $end_index = $i
+                else # ---------------------------- Integers SubBranch
                     $token_type = :integer
                     emitToken #emit integer token
-                else; abandon; end
+                end
 
-            elsif is_first_true? # ---------------------------- True Branch
+            elsif is_true_t? # ---------------------------- True Branch
                 $start_index = $i
                 capture
-                if is_second_true? # munch r
+                if is_true_r? # munch r
                     capture
-                    if is_third_true? # munch u
+                    if is_true_u? # munch u
                         capture
-                        if is_fourth_true? # munch e
+                        if is_true_e? # munch e
                             $end_index = $i
                             capture
+                            $token_type = :boolean
+                            emitToken # emit boolean token
                         else; abandon; end
                     else; abandon; end
                 else; abandon; end
-                # once word is complete, if its followed by a whitespace or the end of the expression then its a boolean primitive value
-                if is_end_of_line? || is_whitespace?
-                    $token_type = :boolean
-                    emitToken # emit boolean token
-                else; abandon; end
 
-            elsif is_first_false? # --------------------------- False Branch
+            elsif is_false_f? # --------------------------- False Branch
                 $start_index = $i
                 capture
-                if is_second_false? # munch a
+                if is_false_a? # munch a
                     capture
-                    if is_third_false? # munch l
+                    if is_false_l? # munch l
                         capture
-                        if is_fourth_false? # munch s
+                        if is_false_s? # munch s
                             capture
-                            if is_fifth_false? # munch e
+                            if is_false_e? # munch e
                                 $end_index = $i
                                 capture
+                                $token_type = :boolean
+                                emitToken # emit boolean token
                             else; abandon; end
                         else; abandon; end
                     else; abandon; end
-                else; abandon; end
-                # once word is complete, if its followed by a whitespace or the end of the $expression then its a boolean primitive value
-                if is_end_of_line? || is_whitespace?
-                    $token_type = :boolean
-                    emitToken # emit boolean token
                 else; abandon; end
 
             elsif is_ampersand? # ----------------------------- Lvalue Branch
@@ -241,7 +209,7 @@ module Lexer
                         else; abandon; end
                     else; abandon; end
                 else; abandon; end
-            elsif false
+            elsif false 
             elsif false 
             else # ------------------------------------------- Default Branch
                 abandon
