@@ -8,6 +8,10 @@ module Tokens
             @end_index = end_index
         end
 
+        def equals?(other)
+            @type == other.type && @source == other.source && @start_index == other.start_index && @end_index == end_index
+        end
+
         def to_s
             puts "Token Type: #{type}. Source: #{source}. [#{start_index} to #{end_index}]\n"
         end
