@@ -7,6 +7,10 @@ module Tokens
             @start_index = start_index
             @end_index = end_index
         end
+
+        def to_s
+            puts "Token Type: #{type}. Source: #{source}. [#{start_index} to #{end_index}]\n"
+        end
     end
 end
 # ---- Possible Token Types as Follows:
