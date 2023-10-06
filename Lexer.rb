@@ -111,11 +111,12 @@ module Lexer
                     $token_type = :float
                     emitToken # emit float token
                 else # ---------------------------- Integers SubBranch
+                    $end_index = $i
                     $token_type = :integer
                     emitToken #emit integer token
                 end
 
-            elsif is_true_t? # ---------------------------- True Branch
+            elsif is_true_t? # -------------------------------- True Branch
                 $start_index = $i
                 capture
                 if is_true_r? # munch r
@@ -131,7 +132,7 @@ module Lexer
                     else; abandon; end
                 else; abandon; end
 
-            elsif is_false_f? # --------------------------- False Branch
+            elsif is_false_f? # ------------------------------- False Branch
                 $start_index = $i
                 capture
                 if is_false_a? # munch a
@@ -153,65 +154,56 @@ module Lexer
             elsif is_ampersand? # ----------------------------- Lvalue Branch
                 $start_index = $i
                 capture
-                if is_open_bracket? # munch open bracket
-                    capture
-                    while is_whitespace?; skip; end # munch variable amount of whitespace [ num
-                    if is_digit? # munch first x value digit
-                        capture
-                        while is_digit? # munch rest x digits
-                            capture
-                        end
-                        while is_whitespace?; skip; end # munch variable amount of whitespace num ,
-                        if is_comma? # munch comma delimiter
-                            capture
-                            while is_whitespace?; skip; end # munch variable amount of whitespace , num
-                            if is_digit? # munch first y value digit
-                                capture
-                                while is_digit? # munch rest y digits
-                                    capture
-                                end
-                                while is_whitespace?; skip; end # munch variable amount of whitespace num ]
-                                if is_close_bracket? # munch close bracket
-                                    $end_index = $i
-                                    capture
-                                    $token_type = :lvalue
-                                    emitToken # emit lvalue token
-                                else; abandon; end
-                            else; abandon; end
-                        else; abandon; end
-                    else; abandon; end
-                else; abandon; end
-            elsif is_open_bracket? # -------------------------- Rvalue Branch
+                $end_index = $i 
+                $token_type = :lvalue
+                emitToken()
+
+            elsif is_open_bracket? # -------------------------- Open Bracket Branch
                 $start_index = $i
                 capture
-                while is_whitespace?; skip; end # munch variable amount of whitespace [ num
-                if is_digit? # munch first x value digit
-                    capture
-                    while is_digit? # munch rest x digits
-                        capture
-                    end
-                    while is_whitespace?; skip; end # munch variable amount of whitespace num ,
-                    if is_comma? # munch comma delimiter
-                        capture
-                        while is_whitespace?; skip; end # munch variable amount of whitespace , num
-                        if is_digit? # munch first y value digit
-                            capture
-                            while is_digit? # munch rest y digits
-                                capture
-                            end
-                            while is_whitespace?; skip; end # munch variable amount of whitespace num ]
-                            if is_close_bracket? # munch close bracket
-                                $end_index = $i
-                                capture
-                                $token_type = :rvalue
-                                emitToken # emit rvalue token
-                            else abandon; end
-                        else; abandon; end
-                    else; abandon; end
-                else; abandon; end
-            elsif false 
-            elsif false 
-            else # ------------------------------------------- Default Branch
+                $end_index = $i 
+                $token_type = :open_bracket
+                emitToken()
+
+            elsif is_close_bracket? # ------------------------- Close Bracket Branch 
+                $start_index = $i
+                capture
+                $end_index = $i 
+                $token_type = :close_bracket
+                emitToken()
+
+            elsif is_open_parenthesis? # ---------------------- Open Parenthesis Branch
+                $start_index = $i
+                capture
+                $end_index = $i
+                $token_type = :open_parenthesis
+                emitToken()
+
+            elsif is_close_parenthesis? # --------------------- Close Parenthesis Branch
+                $start_index = $i
+                capture
+                $end_index = $i
+                $token_type = :close_parenthesis
+                emitToken()
+
+            elsif is_comma? # --------------------------------- Comma Branch
+                $start_index = $i
+                capture
+                $end_index = $i
+                $token_type = :comma
+                emitToken()
+
+            elsif is_m? # ------------------------------------- Max, Min, & Mean Branch
+                $start_index = $i
+                capture
+                if is_a?
+
+                elsif is_i?
+
+                elsif is_e?
+                    
+                else
+            else # -------------------------------------------- Default Branch
                 abandon
             end
         end

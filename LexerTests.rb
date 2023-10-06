@@ -25,4 +25,4 @@ def run_tests(testee)
 end 
 run_tests(LexerTester)
 
-lex("").each() { |token| puts token.to_s}
+lex("&[1, 2]").each() { |token| puts token.to_s}

@@ -24,13 +24,15 @@ end
 # :boolean        | :less_than            | :bitwise_xor
 # :string         | :less_than_equal      | :bitwise_not
 # :lvalue         | :greater_than         | :bitshift_left
-# :rvalue         | :greater_than_equal   | :bitshift_right
+#                 | :greater_than_equal   | :bitshift_right
 #   Arithmetic    | # Statistical         | # Logical
 # :add            | :max                  | :logical_and
 # :subtract       | :min                  | :logical_or
 # :multiply       | :mean                 | :logical_not
 # :divide         | :sum                  |
-# :modulo         |                       |
-#   Casting       | # Invalid             |
-# :float_int_cast | :invalid_token        |
-# :int_float_cast |                       |
+# :modulo         |                       | # Delimiters
+#   Casting       | # Invalid             | :open_bracket
+# :float_int_cast | :invalid_token        | :close_bracket
+# :int_float_cast |                       | :open_parenthesis
+#                 |                       | :close_parenthesis
+#                 |                       | :comma
