@@ -14,20 +14,21 @@ module Lexer
         $tokens = []
 
         # Add current character to token and move along.
-        def capture() 
+        def capture
             $token_source += $expression[$i]
             $i += 1
         end
 
         # Ignore character, reset token.
-        def abandon() 
+        def abandon
             $i += 1
             $token_type = :invalid_token
             $token_source = ''
+            $start_index = $end_index = -1
         end
 
         # Ignore character, but don't reset token.
-        def skip() 
+        def skip
             $i += 1
         end
 
@@ -207,8 +208,9 @@ module Lexer
                     else; abandon; end
                 else; abandon; end
             elsif false
+            elsif false 
             else # ------------------------------------------- Default Branch
-                $i += 1
+                abandon
             end
         end
 
