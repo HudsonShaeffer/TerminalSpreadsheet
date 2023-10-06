@@ -19,6 +19,38 @@ module Lexer
             $i += 1
         end
 
+        # Helper method to reduce clutter in statistical function lexing
+        def capture_lvalue
+            if is_ampersand? # ----------------------------- Lvalue Branch
+                capture
+                if is_open_bracket? # munch open bracket
+                    capture
+                    while is_whitespace?; skip; end # munch variable amount of whitespace [ num
+                    if is_digit? # munch first x value digit
+                        capture
+                        while is_digit? # munch rest x digits
+                            capture
+                        end
+                        while is_whitespace?; skip; end # munch variable amount of whitespace num ,
+                        if is_comma? # munch comma delimiter
+                            capture
+                            while is_whitespace?; skip; end # munch variable amount of whitespace , num
+                            if is_digit? # munch first y value digit
+                                capture
+                                while is_digit? # munch rest y digits
+                                    capture
+                                end
+                                while is_whitespace?; skip; end # munch variable amount of whitespace num ]
+                                if is_close_bracket? # munch close bracket
+                                    capture
+                                else; abandon; end
+                            else; abandon; end
+                        else; abandon; end
+                    else; abandon; end
+                else; abandon; end
+            end
+        end
+
         # Ignore character, reset token.
         def abandon
             $i += 1
