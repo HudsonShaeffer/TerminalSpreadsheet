@@ -18,24 +18,24 @@ module Tokens
     end
 end
 # --------- Possible Token Types as Follows: ---------
-#    Keywords     |     Delimiters      |   Primitives   |
-# :true           | :open_bracket       | :integer       |
-# :false          | :close_bracket      | :float         |
+#    Keywords    x|     Delimiters     x|   Primitives  x|
+# :float_int_cast | :open_bracket       | :integer       |
+# :int_float_cast | :close_bracket      | :float         |
 # :max            | :open_parenthesis   | :boolean       |
 # :min            | :close_parenthesis  | :string        |
 # :mean           | :ampersand          |================|
-# :sum            | :comma              |    Invalid     |
-# :float_int_cast |=====================| :invalid_token |
-# :int_float_cast |      Logical        |================|
-#=================| :logical_and        |   Arithmetic   |
-#    Bitwise      | :logical_or         | :add           |
-# :bitwise_and    | :logical_not        | :subtract      |
-# :bitwise_or     |=====================| :multiply      |
-# :bitwise_xor    |     Relational      | :divide        |
-# :bitwise_not    | :equals             | :modulo        |
-# :bitshift_left  | :not_equals         |================|
-# :bitshift_right | :less_than          |
-#=================| :less_than_equal    |
-#                 | :greater_than       |
-#                 | :greater_than_equal |
-#                 |=====================|
+# :sum            | :comma              |    Invalid    x|
+#=================|=====================| :invalid_token |
+#    Bitwise     x|      Logical       x|================|
+# :bitwise_and    | :logical_and        |   Arithmetic  x|
+# :bitwise_or     | :logical_or         | :add           |
+# :bitwise_xor    | :logical_not        | :subtract      |
+# :bitwise_not    |=====================| :multiply      |
+# :bitshift_left  |     Relational     x| :divide        |
+# :bitshift_right | :equals             | :modulo        |
+#=================| :not_equals         |================|
+#=================| :less_than          |================|
+#=================| :less_than_equal    |================|
+#=================| :greater_than       |================|
+#=================| :greater_than_equal |================|
+#=================|=====================|================|

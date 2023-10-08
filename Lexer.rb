@@ -19,9 +19,9 @@ module Lexer
             $i += 1
         end
 
-        # Ignore character, reset token.
+        # Reset token, but don't Ignore character. 
+        # (if this change ruins tokenizing, make it ignore character again)
         def abandon
-            $i += 1
             $token_type = :invalid_token
             $token_source = ''
             $start_index = $end_index = -1
@@ -36,7 +36,7 @@ module Lexer
         def emitToken
             $tokens[$token_count] = Token.new($token_type, $token_source, $start_index, $end_index)
             $token_count += 1
-            $token_source = ''
+            abandon
         end
         
         # Check if current character is a valid boolean keyword character (case sensitive)
@@ -99,6 +99,7 @@ module Lexer
         # lexing loop
         while ($i < $expression.length)
             if is_whitespace? # ------------------------------- Whitespace (noop) Branch
+                skip
                 abandon
 
             elsif is_quote? # --------------------------------- String Primitive Branch
@@ -133,7 +134,7 @@ module Lexer
                     emitToken() #emit integer token
                 end
 
-            elsif is_true_t? # -------------------------------- True Boolean Keyword Branch
+            elsif is_true_t? # -------------------------------- True Boolean Branch
                 $start_index = $i
                 capture
                 if is_true_r? # munch r
@@ -149,7 +150,7 @@ module Lexer
                     else; abandon; end
                 else; abandon; end
 
-            elsif is_false_f? # ------------------------------- False Boolean Keyword Branch
+            elsif is_false_f? # ------------------------------- False Boolean Branch
                 $start_index = $i
                 capture
                 if is_false_a? # munch a
@@ -287,14 +288,154 @@ module Lexer
                 $token_type = :comma
                 emitToken()
 
-            elsif false
+            elsif is_plus? # ---------------------------------- Add Branch
                 $start_index = $i
                 capture
-            elsif false
+                $end_index = $i
+                token_type = :add
+                emitToken()
+
+            elsif is_minus? # --------------------------------- Subtract Branch
                 $start_index = $i
                 capture
-            else # -------------------------------------------- Default Branch
-                abandon
+                $end_index = $i
+                token_type = :subtract
+                emitToken()
+
+            elsif is_multiply? # ------------------------------ Multiply Branch
+                $start_index = $i
+                capture
+                $end_index = $i
+                token_type = :multiply
+                emitToken()
+
+            elsif is_divide? # -------------------------------- Divide Branch
+                $start_index = $i
+                capture
+                $end_index = $i
+                token_type = :divide
+                emitToken()
+
+            elsif is_modulo? # -------------------------------- Modulo Branch
+                $start_index = $i
+                capture
+                $end_index = $i
+                token_type = :modulo
+                emitToken()
+
+            elsif is_and? # ----------------------------------- Bitwise & Logical And Branch
+                $start_index = $i
+                capture
+                if is_and? # if there is another & immediately following
+                    capture
+                    $end_index = $i
+                    $token_type = :logical_and
+                else # otherwise, that was the end of the token, dont skip or anything
+                    $end_index = $i
+                    $token_type = :bitwise_and
+                end
+                emitToken()
+
+            elsif is_or? # ------------------------------------ Bitwise & Logical Or Branch
+                $start_index = $i
+                capture
+                if is_or? # if there is another & immediately following
+                    capture
+                    $end_index = $i
+                    $token_type = :logical_or
+                else # otherwise, that was the end of the token, dont skip or anything
+                    $end_index = $i
+                    $token_type = :bitwise_or
+                end
+                emitToken()
+
+            elsif is_logical_not? # --------------------------- Logical Not & NotEquals Branch
+                $start_index = $i
+                capture
+                if is_equals? # check for the not equals
+                    capture
+                    $end_index = $i
+                    $token_type = :not_equals
+                else # if theres no equals, thats the end of the token
+                    $end_index =  $i
+                    $token_type = :logical_not
+                end
+                emitToken()
+
+            elsif is_bitwise_not? # --------------------------- Bitwise Not Branch
+                $start_index = $i
+                capture
+                $end_index =  $i
+                $token_type = :bitwise_not
+                emitToken()
+                
+            elsif is_xor? # ----------------------------------- Bitwise Xor Branch
+                $start_index = $i
+                capture
+                $end_index =  $i
+                $token_type = :bitwise_xor
+                emitToken()
+                
+            elsif is_left_shift? # ---------------------------- Bitshift Left Branch
+                $start_index = $i
+                capture
+                if is_left_shift? # make sure theres a second arrow consecutively
+                    capture
+                    $end_index =  $i
+                    $token_type = :bitshift_left
+                    emitToken()
+                else; abandon; end
+                
+            elsif is_right_shift? # --------------------------- Bitshift Right Branch
+                $start_index = $i
+                capture
+                if is_right_shift? # make sure theres a second arrow consecutively
+                    capture
+                    $end_index =  $i
+                    $token_type = :bitshift_right
+                    emitToken()
+                else; abandon; end
+                
+            elsif is_equals? # -------------------------------- Equals Branch
+                $start_index = $i
+                capture
+                $end_index = $i
+                $token_type = :equals
+                emitToken()
+
+            elsif is_less_than? # ----------------------------- Less Than & Less Than Equals Branch
+                $start_index = $i
+                capture
+                if is_equals? # check for the less than equal operator
+                    capture
+                    $end_index = $i
+                    $token_type = :less_than_equal
+                else # otherwise thats the end of the token
+                    $end_index = $i
+                    $token_type = :less_than
+                end
+                emitToken()
+                
+            elsif is_greater_than? # -------------------------- Greater Than & Greater Than Equals Branch
+                $start_index = $i
+                capture
+                if is_equals? # check for the less than equal operator
+                    capture
+                    $end_index = $i
+                    $token_type = :greater_than_equal
+                else # otherwise thats the end of the token
+                    $end_index = $i
+                    $token_type = :greater_than
+                end
+                emitToken()
+
+            else # -------------------------------------------- Invalid Token (Default) Branch
+                $start_index = $i
+                capture
+                $end_index = $i
+                $token_type = :invalid_token
+                emitToken()
+
             end
         end
 
