@@ -34,7 +34,7 @@ end
 # :bitwise_xor    |     Relational      | :divide        |
 # :bitwise_not    | :equals             | :modulo        |
 # :bitshift_left  | :not_equals         |================|
-# bitshift_right  | :less_than          |
+# :bitshift_right | :less_than          |
 #=================| :less_than_equal    |
 #                 | :greater_than       |
 #                 | :greater_than_equal |

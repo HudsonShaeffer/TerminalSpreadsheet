@@ -39,7 +39,7 @@ module Lexer
             $token_source = ''
         end
         
-        # Check if current character is a valid boolean keyword (case sensitive)
+        # Check if current character is a valid boolean keyword character (case sensitive)
         def is_true_t?; $i < $expression.length && $expression[$i] == "t"; end; # true
         def is_true_r?; $i < $expression.length && $expression[$i] == "r"; end;
         def is_true_u?; $i < $expression.length && $expression[$i] == "u"; end;
@@ -50,7 +50,7 @@ module Lexer
         def is_false_s?; $i < $expression.length && $expression[$i] == "s"; end;
         def is_false_e?; $i < $expression.length && $expression[$i] == "e"; end;
 
-        # Check if current character is a valid keyword (not case sensitive)
+        # Check if current character is a valid keyword character (not case sensitive)
         def is_m?; $i < $expression.length && ($expression[$i] == "m" || $expression[$i] == "M"); end; 
         def is_a?; $i < $expression.length && ($expression[$i] == "a" || $expression[$i] == "A"); end; 
         def is_e?; $i < $expression.length && ($expression[$i] == "e" || $expression[$i] == "E"); end;
@@ -63,23 +63,38 @@ module Lexer
         def is_l?; $i < $expression.length && ($expression[$i] == "l" || $expression[$i] == "L"); end;
         def is_o?; $i < $expression.length && ($expression[$i] == "o" || $expression[$i] == "O"); end;
         def is_t?; $i < $expression.length && ($expression[$i] == "t" || $expression[$i] == "T"); end;
-        
-        # Check if current character is a digit, dot, or comma
+
+        # Check if current character is a digit
         def is_digit?; $i < $expression.length && "0" <= $expression[$i] && $expression[$i] <= "9"; end;
+        
+        # Check if current character is a delimiter
         def is_decimal?; $i < $expression.length && $expression[$i] == "."; end;
         def is_comma?; $i < $expression.length && $expression[$i] == ","; end;
-
-        # Check if the current character is an open bracket, close bracket, open parenthesis, or close parenthesis
+        def is_quote?; $i < $expression.length && $expression[$i] == '"'; end;
+        def is_ampersand?; $i < $expression.length && $expression[$i] == '&'; end;
         def is_open_bracket?; $i < $expression.length && $expression[$i] == '['; end;
         def is_close_bracket?; $i < $expression.length && $expression[$i] == ']'; end;
         def is_open_parenthesis?; $i < $expression.length && $expression[$i] == '('; end;
         def is_close_parenthesis?; $i < $expression.length && $expression[$i] == ')'; end;
-
-        # Check if the current character is a delimiter
-        def is_ampersand?; $i < $expression.length && $expression[$i] == '&'; end;
-        def is_quote?; $i < $expression.length && $expression[$i] == '"'; end;
         def is_whitespace?; $i < $expression.length && $expression[$i] == " "; end;
         def is_end_of_line?; !($i < $expression.length); end;
+
+        # Check if current character is a operand
+        def is_plus?; $i < $expression.length && $expression[$i] == "+"; end;
+        def is_minus?; $i < $expression.length && $expression[$i] == "-"; end;
+        def is_multiply?; $i < $expression.length && $expression[$i] == "*"; end;
+        def is_divide?; $i < $expression.length && $expression[$i] == "/"; end;
+        def is_modulo?; $i < $expression.length && $expression[$i] == "%"; end;
+        def is_and?; $i < $expression.length && $expression[$i] == '&'; end;
+        def is_or?; $i < $expression.length && $expression[$i] == '|'; end;
+        def is_xor; $i < $expression.length && $expression[$i] == '^'; end;
+        def is_bitwise_not; $i < $expression.length && $expression[$i] == '~'; end;
+        def is_logical_not?; $i < $expression.length && $expression[$i] == '!'; end;
+        def is_equals?; $i < $expression.length && $expression[$i] == '='; end;
+        def is_less_than?; $i < $expression.length && $expression[$i] == '<'; end;
+        def is_greater_than?; $i < $expression.length && $expression[$i] == '>'; end;
+        def is_left_shift?; $i < $expression.length && $expression[$i] == '<'; end;
+        def is_right_shift?; $i < $expression.length && $expression[$i] == '>'; end;
 
         # lexing loop
         while ($i < $expression.length)
@@ -118,7 +133,7 @@ module Lexer
                     emitToken() #emit integer token
                 end
 
-            elsif is_true_t? # -------------------------------- True Keyword Branch
+            elsif is_true_t? # -------------------------------- True Boolean Keyword Branch
                 $start_index = $i
                 capture
                 if is_true_r? # munch r
@@ -134,7 +149,7 @@ module Lexer
                     else; abandon; end
                 else; abandon; end
 
-            elsif is_false_f? # ------------------------------- False Keyword Branch
+            elsif is_false_f? # ------------------------------- False Boolean Keyword Branch
                 $start_index = $i
                 capture
                 if is_false_a? # munch a
@@ -152,7 +167,7 @@ module Lexer
                         else; abandon; end
                     else; abandon; end
                 else; abandon; end
-                
+
             elsif is_m? # ------------------------------------- Max, Min, & Mean Keyword Branch
                 $start_index = $i
                 capture
