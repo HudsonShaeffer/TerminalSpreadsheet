@@ -17,22 +17,25 @@ module Tokens
         end
     end
 end
-# ---- Possible Token Types as Follows:
-#   Primitives    |   Relational          |   Bitwise
-# :integer        | :equals               | :bitwise_and
-# :float          | :not_equals           | :bitwise_or
-# :boolean        | :less_than            | :bitwise_xor
-# :string         | :less_than_equal      | :bitwise_not
-# :lvalue         | :greater_than         | :bitshift_left
-#                 | :greater_than_equal   | :bitshift_right
-#   Arithmetic    | # Statistical         | # Logical
-# :add            | :max                  | :logical_and
-# :subtract       | :min                  | :logical_or
-# :multiply       | :mean                 | :logical_not
-# :divide         | :sum                  |
-# :modulo         |                       | # Delimiters
-#   Casting       | # Invalid             | :open_bracket
-# :float_int_cast | :invalid_token        | :close_bracket
-# :int_float_cast |                       | :open_parenthesis
-#                 |                       | :close_parenthesis
-#                 |                       | :comma
+# --------- Possible Token Types as Follows: ---------
+#    Keywords     |     Delimiters      |   Primitives   |
+# :true           | :open_bracket       | :integer       |
+# :false          | :close_bracket      | :float         |
+# :max            | :open_parenthesis   | :boolean       |
+# :min            | :close_parenthesis  | :string        |
+# :mean           | :ampersand          |================|
+# :sum            | :comma              |    Invalid     |
+# :float_int_cast |=====================| :invalid_token |
+# :int_float_cast |      Logical        |================|
+#=================| :logical_and        |   Arithmetic   |
+#    Bitwise      | :logical_or         | :add           |
+# :bitwise_and    | :logical_not        | :subtract      |
+# :bitwise_or     |=====================| :multiply      |
+# :bitwise_xor    |     Relational      | :divide        |
+# :bitwise_not    | :equals             | :modulo        |
+# :bitshift_left  | :not_equals         |================|
+# bitshift_right  | :less_than          |
+#=================| :less_than_equal    |
+#                 | :greater_than       |
+#                 | :greater_than_equal |
+#                 |=====================|

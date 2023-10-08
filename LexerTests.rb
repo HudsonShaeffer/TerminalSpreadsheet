@@ -26,3 +26,6 @@ end
 run_tests(LexerTester)
 
 lex("&[1, 2]").each() { |token| puts token.to_s}
+lex("\"Hello World.\"").each() { |token| puts token.to_s}
+lex("1 2.3. 123.3 true").each() { |token| puts token.to_s}
+lex("true").each() { |token| puts token.to_s}
