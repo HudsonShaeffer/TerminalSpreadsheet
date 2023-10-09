@@ -930,7 +930,8 @@ module Model
 
     # Environment: Abstraction
     # holds a reference to the grid
-    # evaluate works on an address (in address or Lvalue format) 
+    # evaluate works on an address (in address format, if invalid format the hash will
+    #       return a nil value so no additional typechecking is in place) 
     #       and returns the evaluated cell contents at that location
     # evaluate returns a NewBoolean, NewFloat, NewInteger, NewString, or nil if the cell is empty
     class Environment
@@ -939,11 +940,7 @@ module Model
         end
 
         def evaluate(address)
-            if address.is_a?(Lvalue)
-                expression = @gridRef.retrieve(address.evaluate(self))
-            elsif
-                expression = @gridRef.retrieve(address)
-            end
+            expression = @gridRef.retrieve(address)
             if expression != nil
                 primitive = expression.evaluate(self)
                 return primitive

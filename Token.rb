@@ -17,7 +17,7 @@ module Tokens
         end
     end
 end
-# --------- Possible Token Types as Follows: ---------
+# ----------- Possible Token Types as Follows: -----------
 #    Keywords    x|     Delimiters     x|   Primitives  x|
 # :float_int_cast | :open_bracket       | :integer       |
 # :int_float_cast | :close_bracket      | :float         |
