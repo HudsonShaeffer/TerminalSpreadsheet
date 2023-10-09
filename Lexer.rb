@@ -61,11 +61,12 @@ module Lexer
         def is_x?; $i < $expression.length && ($expression[$i] == "x" || $expression[$i] == "X"); end; 
         def is_f?; $i < $expression.length && ($expression[$i] == "f" || $expression[$i] == "F"); end;
         def is_l?; $i < $expression.length && ($expression[$i] == "l" || $expression[$i] == "L"); end;
-        def is_o?; $i < $expression.length && ($expression[$i] == "o" || $expression[$i] == "O"); end;
+        def is_o?; $i < $expression.length && ($expression[$i] == "o" || $expression[$i] == "o"); end;
         def is_t?; $i < $expression.length && ($expression[$i] == "t" || $expression[$i] == "T"); end;
 
         # Check if current character is a digit
         def is_digit?; $i < $expression.length && "0" <= $expression[$i] && $expression[$i] <= "9"; end;
+        def is_negative?; $i < $expression.length && $expression[$i] == "-"; end;
         
         # Check if current character is a delimiter
         def is_decimal?; $i < $expression.length && $expression[$i] == "."; end;
@@ -87,8 +88,8 @@ module Lexer
         def is_modulo?; $i < $expression.length && $expression[$i] == "%"; end;
         def is_and?; $i < $expression.length && $expression[$i] == '&'; end;
         def is_or?; $i < $expression.length && $expression[$i] == '|'; end;
-        def is_xor; $i < $expression.length && $expression[$i] == '^'; end;
-        def is_bitwise_not; $i < $expression.length && $expression[$i] == '~'; end;
+        def is_xor?; $i < $expression.length && $expression[$i] == '^'; end;
+        def is_bitwise_not?; $i < $expression.length && $expression[$i] == '~'; end;
         def is_logical_not?; $i < $expression.length && $expression[$i] == '!'; end;
         def is_equals?; $i < $expression.length && $expression[$i] == '='; end;
         def is_less_than?; $i < $expression.length && $expression[$i] == '<'; end;
@@ -109,12 +110,32 @@ module Lexer
                     capture
                 end
                 # munch closing quote
-                $end_index = $i
                 capture
+                $end_index = $i
                 $token_type = :string
                 emitToken() # emit string token
 
-            elsif is_digit? # --------------------------------- Float/Integer Primitives Branch
+            elsif is_digit? # --------------------------------- Positive Float/Integer Primitives Branch
+                $start_index = $i
+                capture
+                while is_digit? # munch all consecutive digits
+                    capture
+                end
+                if is_decimal? # ------------------- Floats SubBranch
+                    capture
+                    while is_digit? # munch all consecutive digits
+                        capture
+                    end
+                    $end_index = $i
+                    $token_type = :float
+                    emitToken() # emit float token
+                else # ---------------------------- Integers SubBranch
+                    $end_index = $i
+                    $token_type = :integer
+                    emitToken() #emit integer token
+                end
+
+            elsif is_negative? # ------------------------------ Negative Float/Integer Primitives Branch
                 $start_index = $i
                 capture
                 while is_digit? # munch all consecutive digits
@@ -201,7 +222,7 @@ module Lexer
                     else; abandon; end
                 else; abandon; end
 
-            elsif if_s? # ------------------------------------- Sum Keyword Branch
+            elsif is_s? # ------------------------------------- Sum Keyword Branch
                 $start_index = $i
                 capture
                 if is_u?
@@ -214,7 +235,7 @@ module Lexer
                     else; abandon; end
                 else; abandon; end
 
-            elsif if_f? # ------------------------------------- Float Casting Keyword Branch
+            elsif is_f? # ------------------------------------- Float Casting Keyword Branch
                 $start_index = $i
                 capture
                 if is_l? # munch l of float
@@ -233,7 +254,7 @@ module Lexer
                     else; abandon; end
                 else; abandon; end
 
-            elsif if_i? # ------------------------------------- Int Casting Keyword Branch
+            elsif is_i? # ------------------------------------- Int Casting Keyword Branch
                 $start_index = $i
                 capture
                 if is_n? # munch n of int

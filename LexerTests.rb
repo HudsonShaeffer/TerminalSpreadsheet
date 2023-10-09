@@ -14,7 +14,23 @@ class LexerTester
     end
 
     def test_lex
-
+        # puts "\nString Primitive:\n"
+        # lex("\"Hello World.\"").each() { |token| token.to_s}
+        # puts "\nInteger & Float Primitives:\n"
+        # lex("15 -15 0 1.5 -1.5").each() { |token| token.to_s}
+        puts "\nBoolean Primitives:\n"
+        lex("true false").each() { |token| token.to_s}
+        lex("TRUE FALSE").each() { |token| token.to_s}
+        puts "\nKeywords:\n"
+        lex("maxminmeansumfloatint").each() { |token| token.to_s}
+        # puts "\nDelimiters:\n"
+        # lex("(&[,],&[,])").each() { |token| token.to_s}
+        # puts "\nOperations:\n"
+        # lex("+-/*%").each() { |token| token.to_s}
+        # lex("!===!==").each() { |token| token.to_s}
+        # lex("&|~^&&||!>><<").each() { |token| token.to_s}
+        # lex("< <=> >=").each() { |token| token.to_s}
+        puts "\n"
     end
 end
 
@@ -24,8 +40,3 @@ def run_tests(testee)
     
 end 
 run_tests(LexerTester)
-
-lex("&[1, 2]").each() { |token| puts token.to_s}
-lex("\"Hello World.\"").each() { |token| puts token.to_s}
-lex("1 2.3. 123.3 true").each() { |token| puts token.to_s}
-lex("true").each() { |token| puts token.to_s}

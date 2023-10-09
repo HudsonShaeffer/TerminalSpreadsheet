@@ -13,7 +13,7 @@ module Tokens
         end
 
         def to_s
-            puts "Token Type: #{type}. Source: #{source}. [#{start_index} to #{end_index}]\n"
+            puts "Token Type: :#{type} | Source: \"#{source}\" [#{start_index}...#{end_index}]"
         end
     end
 end
