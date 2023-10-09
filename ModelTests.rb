@@ -23,7 +23,7 @@ class ModelTester
         puts
         puts "  Testing Enviornment:"           # Enviornment Tests
         # Create testee
-        @enviornment = Enviornment.new(@grid)
+        @enviornment = Environment.new(@grid)
         # Test evaluate
         assert_equal(4, @enviornment.evaluate(create_address(0,0)).value, 
                         "Evaluate Test Failed")
@@ -754,7 +754,7 @@ run_tests(ModelTester)
 puts "----------~ Dynamic Testing ~---------------"
 # Construct Grid and Enviornment
 grid = Grid.new()
-enviornment = Enviornment.new(grid)
+enviornment = Environment.new(grid)
 
 # Demonstrace putting an Add expression in and out
 grid.place(create_address(0,0), Add.new(NewInteger.new(2), NewInteger.new(2)))

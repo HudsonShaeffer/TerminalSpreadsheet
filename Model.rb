@@ -13,7 +13,7 @@ module Model
             @value = value
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             self
         end
 
@@ -32,7 +32,7 @@ module Model
             @value = value
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             self
         end
 
@@ -51,7 +51,7 @@ module Model
             @value = value
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             self
         end
 
@@ -70,7 +70,7 @@ module Model
             @value = value
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             self
         end
 
@@ -94,7 +94,7 @@ module Model
             @address = address
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             @address
         end
 
@@ -113,8 +113,8 @@ module Model
             @address = address
         end
 
-        def evaluate (enviornment)
-            expression = enviornment.evaluate(@address)
+        def evaluate (environment)
+            expression = environment.evaluate(@address)
             if expression == nil
                 raise UninitializedCellError.new("Rvalue: Attempted to retrieve an uninitialized cell")
             end
@@ -137,10 +137,10 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
             # validate type float
             if left_primitive.is_a?(NewFloat) && right_primitive.is_a?(NewFloat)
                 return NewFloat.new(left_primitive.value + right_primitive.value)
@@ -167,10 +167,10 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
             # validate type float
             if left_primitive.is_a?(NewFloat) && right_primitive.is_a?(NewFloat)
                 return NewFloat.new(left_primitive.value - right_primitive.value)
@@ -197,10 +197,10 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
             # validate type float
             if left_primitive.is_a?(NewFloat) && right_primitive.is_a?(NewFloat)
                 return NewFloat.new(left_primitive.value / right_primitive.value)
@@ -227,10 +227,10 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
             # validate type float
             if left_primitive.is_a?(NewFloat) && right_primitive.is_a?(NewFloat)
                 return NewFloat.new(left_primitive.value * right_primitive.value)
@@ -257,10 +257,10 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
             # validate type float
             if left_primitive.is_a?(NewFloat) && right_primitive.is_a?(NewFloat)
                 return NewFloat.new(left_primitive.value % right_primitive.value)
@@ -287,10 +287,13 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
+            left_primitive = @left.evaluate(environment)
+            if left_primitive.value == false
+                return NewBoolean(false)
+            end
+            right_primitive = @right.evaluate(environment)
             # validate type
             if left_primitive.is_a?(NewBoolean) && right_primitive.is_a?(NewBoolean)
                 return NewBoolean.new(left_primitive.value && right_primitive.value)
@@ -314,10 +317,13 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
+            left_primitive = @left.evaluate(environment)
+            if left_primitive.value == true
+                return NewBoolean(true)
+            end
+            right_primitive = @right.evaluate(environment)
             # validate type
             if left_primitive.is_a?(NewBoolean) && right_primitive.is_a?(NewBoolean)
                 return NewBoolean.new(left_primitive.value || right_primitive.value)
@@ -340,9 +346,9 @@ module Model
             @operand = operand
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evalute operand into primitive
-            primitive = @operand.evaluate(enviornment)
+            primitive = @operand.evaluate(environment)
             # validate type
             if primitive.is_a?(NewBoolean)
                 return NewBoolean.new(!primitive.value)
@@ -366,10 +372,10 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
             return NewBoolean.new(left_primitive.value == right_primitive.value)
         end
 
@@ -389,10 +395,10 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
             return NewBoolean.new(left_primitive.value != right_primitive.value)
         end
 
@@ -412,11 +418,14 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
-            return NewBoolean.new(left_primitive.value < right_primitive.value)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
+            if !(left_primitive.is_a?(NewBoolean) && left_primitive.is_a?(NewBoolean))
+                return NewBoolean.new(left_primitive.value < right_primitive.value)
+            end
+            raise TypeError.new("Not: Failed to evaluate comparasion")
         end
 
         def to_s
@@ -435,11 +444,14 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
-            return NewBoolean.new(left_primitive.value <= right_primitive.value)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
+            if !(left_primitive.is_a?(NewBoolean) && left_primitive.is_a?(NewBoolean))
+                return NewBoolean.new(left_primitive.value <= right_primitive.value)
+            end
+            raise TypeError.new("Not: Failed to evaluate comparasion")
         end
 
         def to_s
@@ -458,11 +470,14 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
-            return NewBoolean.new(left_primitive.value > right_primitive.value)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
+            if !(left_primitive.is_a?(NewBoolean) && left_primitive.is_a?(NewBoolean))
+                return NewBoolean.new(left_primitive.value > right_primitive.value)
+            end
+            raise TypeError.new("Not: Failed to evaluate comparasion")
         end
 
         def to_s
@@ -481,11 +496,14 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
-            return NewBoolean.new(left_primitive.value >= right_primitive.value)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
+            if !(left_primitive.is_a?(NewBoolean) && left_primitive.is_a?(NewBoolean))
+                return NewBoolean.new(left_primitive.value >= right_primitive.value)
+            end
+            raise TypeError.new("Not: Failed to evaluate comparasion")
         end
 
         def to_s
@@ -504,10 +522,10 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
             # validate type
             if left_primitive.is_a?(NewInteger) && right_primitive.is_a?(NewInteger)
                 return NewInteger.new(left_primitive.value & right_primitive.value)
@@ -531,10 +549,10 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
             # validate type
             if left_primitive.is_a?(NewInteger) && right_primitive.is_a?(NewInteger)
                 return NewInteger.new(left_primitive.value | right_primitive.value)
@@ -558,10 +576,10 @@ module Model
             @right = right
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaulate left and right into primitives
-            left_primitive = @left.evaluate(enviornment)
-            right_primitive = @right.evaluate(enviornment)
+            left_primitive = @left.evaluate(environment)
+            right_primitive = @right.evaluate(environment)
             # validate type
             if left_primitive.is_a?(NewInteger) && right_primitive.is_a?(NewInteger)
                 return NewInteger.new(left_primitive.value ^ right_primitive.value)
@@ -584,9 +602,9 @@ module Model
             @operand = operand
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaluate the operand into a primitive
-            primitive = @operand.evaluate(enviornment)
+            primitive = @operand.evaluate(environment)
             # validate type
             if primitive.is_a?(NewInteger)
                 return NewInteger.new(~primitive.value)
@@ -610,10 +628,10 @@ module Model
             @shift = shift
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaluate the bits and shift into primitive types
-            bits_primitive = @bits.evaluate(enviornment)
-            shift_primitive = @shift.evaluate(enviornment)
+            bits_primitive = @bits.evaluate(environment)
+            shift_primitive = @shift.evaluate(environment)
             #  validate type
             if bits_primitive.is_a?(NewInteger) && shift_primitive.is_a?(NewInteger)
                 return NewInteger.new(bits_primitive.value << shift_primitive.value)
@@ -637,10 +655,10 @@ module Model
             @shift = shift
         end
 
-        def evaluate (enviornment)
+        def evaluate (environment)
             # evaluate the bits and shift into primitive types
-            bits_primitive = @bits.evaluate(enviornment)
-            shift_primitive = @shift.evaluate(enviornment)
+            bits_primitive = @bits.evaluate(environment)
+            shift_primitive = @shift.evaluate(environment)
             #  validate type
             if bits_primitive.is_a?(NewInteger) && shift_primitive.is_a?(NewInteger)
                 return NewInteger.new(bits_primitive.value >> shift_primitive.value)
@@ -663,9 +681,9 @@ module Model
             @expression = expression
         end
 
-        def evaluate(enviornment)
+        def evaluate(environment)
             # evaluate the expression into a primitive
-            primitive = @expression.evaluate(enviornment)
+            primitive = @expression.evaluate(environment)
             # validate primitive's type
             if primitive.is_a?(NewFloat)
                 return NewInteger.new(primitive.value.round)
@@ -688,9 +706,9 @@ module Model
             @expression = expression
         end
 
-        def evaluate(enviornment)
+        def evaluate(environment)
             # evaluate the expression into a primitive
-            primitive = @expression.evaluate(enviornment)
+            primitive = @expression.evaluate(environment)
             # validate primitive's type
             if primitive.is_a?(NewInteger)
                 return NewFloat.new(primitive.value.to_f)
@@ -715,7 +733,7 @@ module Model
             @bottom_right = bottom_right
         end
 
-        def evaluate(enviornment)
+        def evaluate(environment)
             if top_left.is_a?(Lvalue) && bottom_right.is_a?(Lvalue) # validate address type
                 if top_left.address[0] <= bottom_right.address[0] && top_left.address[1] <= bottom_right.address[1]
 
@@ -730,8 +748,8 @@ module Model
                     for x in min_x_coord..max_x_coord do
                         # iterate through each row of each column by y index
                         for y in min_y_coord..max_y_coord do
-                            # get evaluated cell contents from enviornment
-                            primitive = enviornment.evaluate(create_address(x,y))
+                            # get evaluated cell contents from environment
+                            primitive = environment.evaluate(create_address(x,y))
                             # check if this cell is filled 
                             if primitive == nil
                                 raise UninitializedCellError.new("Max: Came across an uninitialized cell.")
@@ -766,7 +784,7 @@ module Model
             @bottom_right = bottom_right
         end
 
-        def evaluate(enviornment)
+        def evaluate(environment)
             if top_left.is_a?(Lvalue) && bottom_right.is_a?(Lvalue) # validate address type
                 if top_left.address[0] <= bottom_right.address[0] && top_left.address[1] <= bottom_right.address[1] 
 
@@ -781,8 +799,8 @@ module Model
                     for x in min_x_coord..max_x_coord do
                         # iterate through each row of each column by y index
                         for y in min_y_coord..max_y_coord do
-                            # get evaluated cell contents from enviornment
-                            primitive = enviornment.evaluate(create_address(x,y))
+                            # get evaluated cell contents from environment
+                            primitive = environment.evaluate(create_address(x,y))
                             # check if this cell is filled
                             if primitive == nil
                                 raise UninitializedCellError.new("Max: Came across an uninitialized cell.")
@@ -817,7 +835,7 @@ module Model
             @bottom_right = bottom_right
         end
 
-        def evaluate(enviornment)
+        def evaluate(environment)
             if top_left.is_a?(Lvalue) && bottom_right.is_a?(Lvalue) # validate address type
                 if top_left.address[0] <= bottom_right.address[0] && top_left.address[1] <= bottom_right.address[1] 
 
@@ -832,8 +850,8 @@ module Model
                     for x in min_x_coord..max_x_coord do
                         # iterate through each row of each column by y index
                         for y in min_y_coord..max_y_coord do
-                            # get evaluated cell contents from enviornment
-                            primitive = enviornment.evaluate(create_address(x,y))
+                            # get evaluated cell contents from environment
+                            primitive = environment.evaluate(create_address(x,y))
                             # check if this cell is filled
                             if primitive == nil
                                 raise UninitializedCellError.new("Max: Came across an uninitialized cell.")
@@ -870,7 +888,7 @@ module Model
             @bottom_right = bottom_right
         end
 
-        def evaluate(enviornment)
+        def evaluate(environment)
             if top_left.is_a?(Lvalue) && bottom_right.is_a?(Lvalue) # validate address type
                 if top_left.address[0] <= bottom_right.address[0] && top_left.address[1] <= bottom_right.address[1]
 
@@ -885,8 +903,8 @@ module Model
                     for x in min_x_coord..max_x_coord do
                         # iterate through each row of each column by y index
                         for y in min_y_coord..max_y_coord do
-                            # get evaluated cell contents from enviornment
-                            primitive = enviornment.evaluate(create_address(x,y))
+                            # get evaluated cell contents from environment
+                            primitive = environment.evaluate(create_address(x,y))
                             # check if this cell is filled
                             if primitive == nil
                                 raise UninitializedCellError.new("Max: Came across an uninitialized cell.")
@@ -910,12 +928,12 @@ module Model
         end
     end
 
-    # Enviornment: Abstraction
+    # Environment: Abstraction
     # holds a reference to the grid
     # evaluate works on an address (in address or Lvalue format) 
     #       and returns the evaluated cell contents at that location
     # evaluate returns a NewBoolean, NewFloat, NewInteger, NewString, or nil if the cell is empty
-    class Enviornment
+    class Environment
         def initialize(gridRef)
             @gridRef = gridRef
         end

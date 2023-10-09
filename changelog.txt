@@ -1,0 +1,4 @@
+==Model 1 Submitted==
+10/9 - Fixed Spelling on Environment, I consistently misspelled it as envivornment
+10/9 - Added typechecking for not booleans for ordering operations, not sure why I thought booleans were orderable
+10/9 - Added short curcuit logic to and & or before the evaluate of the right operand
