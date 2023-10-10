@@ -138,31 +138,12 @@ module Lexer
                     emitToken() #emit integer token
                 end
 
-            elsif is_negative? # ------------------------------ Negative Float/Integer Primitives Branch
+            elsif is_negative? # ------------------------------ Negative / Subtraction Branch
                 $start_index = $i
                 capture
-                if !is_digit? # if just the negative sign, its for subtraction
-                    $end_index = $i
-                    $token_type = :subtract
-                    emitToken()
-                else
-                    while is_digit? # munch all consecutive digits
-                        capture
-                    end
-                    if is_decimal? # ------------------- Floats SubBranch
-                        capture
-                        while is_digit? # munch all consecutive digits
-                            capture
-                        end
-                        $end_index = $i
-                        $token_type = :float
-                        emitToken() # emit float token
-                    else # ---------------------------- Integers SubBranch
-                        $end_index = $i
-                        $token_type = :integer
-                        emitToken() #emit integer token
-                    end
-                end
+                $end_index = $i
+                $token_type = :subtract
+                emitToken()
 
             elsif is_t? # -------------------------------- True Boolean Branch
                 $start_index = $i
