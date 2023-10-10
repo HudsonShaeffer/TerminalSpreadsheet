@@ -27,6 +27,11 @@ module Lexer
             $start_index = $end_index = -1
         end
 
+        def invalidate
+            $token_type = :invalid_token
+            emitToken()
+        end
+
         # Ignore character, but don't reset token.
         def skip
             $i += 1
@@ -39,30 +44,28 @@ module Lexer
             abandon
         end
         
-        # Check if current character is a valid boolean keyword character (case sensitive)
-        def is_true_t?; $i < $expression.length && $expression[$i] == "t"; end; # true
+        # Check if current character is a valid boolean keyword character (lowercase sensitive)
         def is_true_r?; $i < $expression.length && $expression[$i] == "r"; end;
         def is_true_u?; $i < $expression.length && $expression[$i] == "u"; end;
         def is_true_e?; $i < $expression.length && $expression[$i] == "e"; end;
-        def is_false_f?; $i < $expression.length && $expression[$i] == "f"; end; # false
         def is_false_a?; $i < $expression.length && $expression[$i] == "a"; end;
         def is_false_l?; $i < $expression.length && $expression[$i] == "l"; end;
         def is_false_s?; $i < $expression.length && $expression[$i] == "s"; end;
         def is_false_e?; $i < $expression.length && $expression[$i] == "e"; end;
 
         # Check if current character is a valid keyword character (not case sensitive)
-        def is_m?; $i < $expression.length && ($expression[$i] == "m" || $expression[$i] == "M"); end; 
-        def is_a?; $i < $expression.length && ($expression[$i] == "a" || $expression[$i] == "A"); end; 
-        def is_e?; $i < $expression.length && ($expression[$i] == "e" || $expression[$i] == "E"); end;
-        def is_i?; $i < $expression.length && ($expression[$i] == "i" || $expression[$i] == "I"); end; 
-        def is_n?; $i < $expression.length && ($expression[$i] == "n" || $expression[$i] == "N"); end; 
-        def is_u?; $i < $expression.length && ($expression[$i] == "u" || $expression[$i] == "U"); end; 
-        def is_s?; $i < $expression.length && ($expression[$i] == "s" || $expression[$i] == "S"); end; 
-        def is_x?; $i < $expression.length && ($expression[$i] == "x" || $expression[$i] == "X"); end; 
-        def is_f?; $i < $expression.length && ($expression[$i] == "f" || $expression[$i] == "F"); end;
-        def is_l?; $i < $expression.length && ($expression[$i] == "l" || $expression[$i] == "L"); end;
-        def is_o?; $i < $expression.length && ($expression[$i] == "o" || $expression[$i] == "o"); end;
-        def is_t?; $i < $expression.length && ($expression[$i] == "t" || $expression[$i] == "T"); end;
+        def is_m?; $i < $expression.length && ($expression[$i] == 'm' || $expression[$i] == 'M'); end; 
+        def is_a?; $i < $expression.length && ($expression[$i] == 'a' || $expression[$i] == 'A'); end; 
+        def is_e?; $i < $expression.length && ($expression[$i] == 'e' || $expression[$i] == 'E'); end;
+        def is_i?; $i < $expression.length && ($expression[$i] == 'i' || $expression[$i] == 'I'); end; 
+        def is_n?; $i < $expression.length && ($expression[$i] == 'n' || $expression[$i] == 'N'); end; 
+        def is_u?; $i < $expression.length && ($expression[$i] == 'u' || $expression[$i] == 'U'); end; 
+        def is_s?; $i < $expression.length && ($expression[$i] == 's' || $expression[$i] == 'S'); end; 
+        def is_x?; $i < $expression.length && ($expression[$i] == 'x' || $expression[$i] == 'X'); end; 
+        def is_f?; $i < $expression.length && ($expression[$i] == 'f' || $expression[$i] == 'F'); end;
+        def is_l?; $i < $expression.length && ($expression[$i] == 'l' || $expression[$i] == 'L'); end;
+        def is_o?; $i < $expression.length && ($expression[$i] == 'o' || $expression[$i] == 'O'); end;
+        def is_t?; $i < $expression.length && ($expression[$i] == 't' || $expression[$i] == 'T'); end;
 
         # Check if current character is a digit
         def is_digit?; $i < $expression.length && "0" <= $expression[$i] && $expression[$i] <= "9"; end;
@@ -72,7 +75,7 @@ module Lexer
         def is_decimal?; $i < $expression.length && $expression[$i] == "."; end;
         def is_comma?; $i < $expression.length && $expression[$i] == ","; end;
         def is_quote?; $i < $expression.length && $expression[$i] == '"'; end;
-        def is_ampersand?; $i < $expression.length && $expression[$i] == '&'; end;
+        def is_dollar?; $i < $expression.length && $expression[$i] == '$'; end;
         def is_open_bracket?; $i < $expression.length && $expression[$i] == '['; end;
         def is_close_bracket?; $i < $expression.length && $expression[$i] == ']'; end;
         def is_open_parenthesis?; $i < $expression.length && $expression[$i] == '('; end;
@@ -81,11 +84,11 @@ module Lexer
         def is_end_of_line?; !($i < $expression.length); end;
 
         # Check if current character is a operand
-        def is_plus?; $i < $expression.length && $expression[$i] == "+"; end;
-        def is_minus?; $i < $expression.length && $expression[$i] == "-"; end;
-        def is_multiply?; $i < $expression.length && $expression[$i] == "*"; end;
-        def is_divide?; $i < $expression.length && $expression[$i] == "/"; end;
-        def is_modulo?; $i < $expression.length && $expression[$i] == "%"; end;
+        def is_plus?; $i < $expression.length && $expression[$i] === '+'; end;
+        def is_minus?; $i < $expression.length && $expression[$i] === '-'; end;
+        def is_multiply?; $i < $expression.length && $expression[$i] === '*'; end;
+        def is_divide?; $i < $expression.length && $expression[$i] === '/'; end;
+        def is_modulo?; $i < $expression.length && $expression[$i] === '%'; end;
         def is_and?; $i < $expression.length && $expression[$i] == '&'; end;
         def is_or?; $i < $expression.length && $expression[$i] == '|'; end;
         def is_xor?; $i < $expression.length && $expression[$i] == '^'; end;
@@ -138,24 +141,30 @@ module Lexer
             elsif is_negative? # ------------------------------ Negative Float/Integer Primitives Branch
                 $start_index = $i
                 capture
-                while is_digit? # munch all consecutive digits
-                    capture
-                end
-                if is_decimal? # ------------------- Floats SubBranch
-                    capture
+                if !is_digit? # if just the negative sign, its for subtraction
+                    $end_index = $i
+                    $token_type = :subtract
+                    emitToken()
+                else
                     while is_digit? # munch all consecutive digits
                         capture
                     end
-                    $end_index = $i
-                    $token_type = :float
-                    emitToken() # emit float token
-                else # ---------------------------- Integers SubBranch
-                    $end_index = $i
-                    $token_type = :integer
-                    emitToken() #emit integer token
+                    if is_decimal? # ------------------- Floats SubBranch
+                        capture
+                        while is_digit? # munch all consecutive digits
+                            capture
+                        end
+                        $end_index = $i
+                        $token_type = :float
+                        emitToken() # emit float token
+                    else # ---------------------------- Integers SubBranch
+                        $end_index = $i
+                        $token_type = :integer
+                        emitToken() #emit integer token
+                    end
                 end
 
-            elsif is_true_t? # -------------------------------- True Boolean Branch
+            elsif is_t? # -------------------------------- True Boolean Branch
                 $start_index = $i
                 capture
                 if is_true_r? # munch r
@@ -171,7 +180,7 @@ module Lexer
                     else; abandon; end
                 else; abandon; end
 
-            elsif is_false_f? # ------------------------------- False Boolean Branch
+            elsif is_f? # ------------------------------- False Boolean Branch
                 $start_index = $i
                 capture
                 if is_false_a? # munch a
@@ -185,6 +194,20 @@ module Lexer
                                 $end_index = $i
                                 $token_type = :boolean
                                 emitToken() # emit boolean token
+                            else; abandon; end
+                        else; abandon; end
+                    else; abandon; end
+                elsif is_l? # munch l of float
+                    capture
+                    if is_o? # munch o of float
+                        capture
+                        if is_a? # munch a of float
+                            capture
+                            if is_t?
+                                capture
+                                $end_index = $i
+                                $token_type = :float_int_cast
+                                emitToken()
                             else; abandon; end
                         else; abandon; end
                     else; abandon; end
@@ -235,25 +258,6 @@ module Lexer
                     else; abandon; end
                 else; abandon; end
 
-            elsif is_f? # ------------------------------------- Float Casting Keyword Branch
-                $start_index = $i
-                capture
-                if is_l? # munch l of float
-                    capture
-                    if is_o? # munch o of float
-                        capture
-                        if is_a? # munch a of float
-                            capture
-                            if is_t?
-                                capture
-                                $end_index = $i
-                                $token_type = :float_int_cast
-                                emitToken()
-                            else; abandon; end
-                        else; abandon; end
-                    else; abandon; end
-                else; abandon; end
-
             elsif is_i? # ------------------------------------- Int Casting Keyword Branch
                 $start_index = $i
                 capture
@@ -267,11 +271,11 @@ module Lexer
                     else; abandon; end
                 else; abandon; end
 
-            elsif is_ampersand? # ----------------------------- Ampersand Branch
+            elsif is_dollar? # ----------------------------- Ampersand Branch
                 $start_index = $i
                 capture
                 $end_index = $i 
-                $token_type = :ampersand
+                $token_type = :dollar_sign
                 emitToken()
 
             elsif is_open_bracket? # -------------------------- Open Bracket Branch
@@ -313,35 +317,29 @@ module Lexer
                 $start_index = $i
                 capture
                 $end_index = $i
-                token_type = :add
+                $token_type = :add
                 emitToken()
 
-            elsif is_minus? # --------------------------------- Subtract Branch
-                $start_index = $i
-                capture
-                $end_index = $i
-                token_type = :subtract
-                emitToken()
 
             elsif is_multiply? # ------------------------------ Multiply Branch
                 $start_index = $i
                 capture
                 $end_index = $i
-                token_type = :multiply
+                $token_type = :multiply
                 emitToken()
 
             elsif is_divide? # -------------------------------- Divide Branch
                 $start_index = $i
                 capture
                 $end_index = $i
-                token_type = :divide
+                $token_type = :divide
                 emitToken()
 
             elsif is_modulo? # -------------------------------- Modulo Branch
                 $start_index = $i
                 capture
                 $end_index = $i
-                token_type = :modulo
+                $token_type = :modulo
                 emitToken()
 
             elsif is_and? # ----------------------------------- Bitwise & Logical And Branch
@@ -397,32 +395,15 @@ module Lexer
                 $token_type = :bitwise_xor
                 emitToken()
                 
-            elsif is_left_shift? # ---------------------------- Bitshift Left Branch
-                $start_index = $i
-                capture
-                if is_left_shift? # make sure theres a second arrow consecutively
-                    capture
-                    $end_index =  $i
-                    $token_type = :bitshift_left
-                    emitToken()
-                else; abandon; end
-                
-            elsif is_right_shift? # --------------------------- Bitshift Right Branch
-                $start_index = $i
-                capture
-                if is_right_shift? # make sure theres a second arrow consecutively
-                    capture
-                    $end_index =  $i
-                    $token_type = :bitshift_right
-                    emitToken()
-                else; abandon; end
-                
             elsif is_equals? # -------------------------------- Equals Branch
                 $start_index = $i
                 capture
-                $end_index = $i
-                $token_type = :equals
-                emitToken()
+                if is_equals?
+                    capture
+                    $end_index = $i
+                    $token_type = :equals
+                    emitToken()
+                end
 
             elsif is_less_than? # ----------------------------- Less Than & Less Than Equals Branch
                 $start_index = $i
@@ -431,6 +412,10 @@ module Lexer
                     capture
                     $end_index = $i
                     $token_type = :less_than_equal
+                elsif is_left_shift? # make sure theres a second arrow consecutively
+                    capture
+                    $end_index =  $i
+                    $token_type = :bitshift_left
                 else # otherwise thats the end of the token
                     $end_index = $i
                     $token_type = :less_than
@@ -444,6 +429,10 @@ module Lexer
                     capture
                     $end_index = $i
                     $token_type = :greater_than_equal
+                elsif is_right_shift? # make sure theres a second arrow consecutively
+                    capture
+                    $end_index =  $i
+                    $token_type = :bitshift_right
                 else # otherwise thats the end of the token
                     $end_index = $i
                     $token_type = :greater_than

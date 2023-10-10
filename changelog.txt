@@ -3,3 +3,4 @@
 10/9 - Added typechecking for not booleans for ordering operations, not sure why I thought booleans were orderable
 10/9 - Added short curcuit logic to and & or before the evaluate of the right operand
 10/9 - Changed Environment's evaluate function to only work on addresses, not Lvalues, Chris raised good points
+10/10 - Changed Lvalue's delimiter char from '&' to '$'

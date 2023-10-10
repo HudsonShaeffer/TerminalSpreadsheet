@@ -99,7 +99,7 @@ module Model
         end
 
         def to_s
-            "&[#{@address[0]}, #{@address[1]}]"
+            "$[#{@address[0]}, #{@address[1]}]"
         end
     end
 

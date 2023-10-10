@@ -23,7 +23,7 @@ end
 # :int_float_cast | :close_bracket      | :float         |
 # :max            | :open_parenthesis   | :boolean       |
 # :min            | :close_parenthesis  | :string        |
-# :mean           | :ampersand          |================|
+# :mean           | :dollar_sign        |================|
 # :sum            | :comma              |    Invalid    x|
 #=================|=====================| :invalid_token |
 #    Bitwise     x|      Logical       x|================|
