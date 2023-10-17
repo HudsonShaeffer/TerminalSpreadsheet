@@ -301,7 +301,6 @@ module Lexer
                 $token_type = :add
                 emitToken()
 
-
             elsif is_multiply? # ------------------------------ Multiply Branch
                 $start_index = $i
                 capture
