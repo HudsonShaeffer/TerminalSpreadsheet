@@ -13,9 +13,9 @@ module Parser
         # expression = logical so logical is first
         def logical
             left = equals() 
-            if type?(:logical_and)
-
-            elsif type?(:logical_or)
+            if assert_type?(:logical_and)
+                
+            elsif assert_type?(:logical_or)
 
             end
             left
@@ -64,10 +64,19 @@ module Parser
         #==============================================================================|
         
         # move along to next token
-        def next; @i += 1; end
+        def skip; @i += 1; end
 
-        # check if current token both exists and meets a provided type
-        def type?(type); @i < @tokens.length && @tokens[@i].type == type; end
+        # check if current token both exists and meets provided type
+        def type?(type); inbounds? && @tokens[@i].type == type; end
+
+        # same behavior of type? + skip the token if it meets provided type
+        def assert_type?(type); type?(type) ? (skip(); true) : false; end
+
+        # returns true if I'th token exists
+        def inbounds?; @i < @tokens.length; end
+
+        # returns true if I'th token does not exist
+        def outbounds?; !inbounds?; end
         
         # return current token's source string
         def capture; @tokens[@i].source; end
