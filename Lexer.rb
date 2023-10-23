@@ -69,7 +69,6 @@ module Lexer
 
         # Check if current character is a digit
         def is_digit?; $i < $expression.length && "0" <= $expression[$i] && $expression[$i] <= "9"; end;
-        def is_negative?; $i < $expression.length && $expression[$i] == "-"; end;
         
         # Check if current character is a delimiter
         def is_decimal?; $i < $expression.length && $expression[$i] == "."; end;
@@ -138,7 +137,7 @@ module Lexer
                     emitToken() #emit integer token
                 end
 
-            elsif is_negative? # ------------------------------ Negative / Subtraction Branch
+            elsif is_minus? # ------------------------------ Negative / Subtraction Branch
                 $start_index = $i
                 capture
                 $end_index = $i
