@@ -7,10 +7,12 @@ module Model
     # stores a value intended to be used as a integer
     # returns a NewInteger when evaluated
     class NewInteger
-        attr_reader :value
+        attr_reader :value, :start_index, :end_index
 
-        def initialize(value)
+        def initialize(value, start_index, end_index)
             @value = value
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -26,10 +28,12 @@ module Model
     # stores a value intended to be used as a float
     # returns a NewFloat when evaluated
     class NewFloat
-        attr_reader :value
+        attr_reader :value, :start_index, :end_index
 
-        def initialize(value)
+        def initialize(value, start_index, end_index)
             @value = value
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -45,10 +49,12 @@ module Model
     # stores a value intended to be used as a boolean
     # returns a NewBoolean when evaluated
     class NewBoolean
-        attr_reader :value
+        attr_reader :value, :start_index, :end_index
 
-        def initialize(value)
+        def initialize(value, start_index, end_index)
             @value = value
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -64,10 +70,12 @@ module Model
     # stores a value intended to be used as a string
     # returns a NewString when evaluated
     class NewString
-        attr_reader :value
+        attr_reader :value, :start_index, :end_index
 
-        def initialize(value)
+        def initialize(value, start_index, end_index)
             @value = value
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -88,10 +96,12 @@ module Model
     # works on an address and stores a value intended to be used as a cell address
     # returns the address of the cell
     class Lvalue
-        attr_reader :address
+        attr_reader :address, :start_index, :end_index
 
-        def initialize(address)
+        def initialize(address, start_index, end_index)
             @address = address
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -107,10 +117,12 @@ module Model
     # works on an address and stores the cell address as well as the evaluated contents of the cell
     # returns the value contained within the cell at address
     class Rvalue
-        attr_reader :address
+        attr_reader :address, :start_index, :end_index
 
-        def initialize(address)
+        def initialize(address, start_index, end_index)
             @address = address
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -130,11 +142,13 @@ module Model
     # works on a left and right operand
     # returns a NewFloat or NewInteger depending on operand type
     class Add
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -160,11 +174,13 @@ module Model
     # works on a left and right operand
     # returns a NewFloat or NewInteger depending on operand type
     class Subtract
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -190,11 +206,13 @@ module Model
     # works on a left and right operand
     # returns a NewFloat or NewInteger depending on operand type
     class Divide
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -220,11 +238,13 @@ module Model
     # works on a left and right operand
     # returns a NewFloat or NewInteger depending on operand type
     class Multiply
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -250,11 +270,13 @@ module Model
     # works on a left and right operand
     # returns a NewFloat or NewInteger depending on operand type
     class Modulo
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -280,11 +302,13 @@ module Model
     # works on a left and right operand
     # returns a NewBoolean
     class And
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -310,11 +334,13 @@ module Model
     # works on a left and right operand
     # returns a NewBoolean
     class Or
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -340,10 +366,12 @@ module Model
     # works on a unary operand
     # returns a NewBoolean
     class Not
-        attr_reader :operand
+        attr_reader :operand, :start_index, :end_index
 
-        def initialize(operand)
+        def initialize(operand, start_index, end_index)
             @operand = operand
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -365,11 +393,13 @@ module Model
     # works on a left and right operand
     # returns a NewBoolean
     class Equals
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -388,11 +418,13 @@ module Model
     # works on a left and right operand
     # returns a NewBoolean
     class NotEquals
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -411,11 +443,13 @@ module Model
     # works on a left and right operand
     # returns a NewBoolean
     class LessThan
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -437,11 +471,13 @@ module Model
     # works on a left and right operand
     # returns a NewBoolean
     class LessThanEqual
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -463,11 +499,13 @@ module Model
     # works on a left and right operand
     # returns a NewBoolean
     class GreaterThan
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -489,11 +527,13 @@ module Model
     # works on a left and right operand
     # returns a NewBoolean
     class GreaterThanEqual
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -515,11 +555,13 @@ module Model
     # works on a left and right operand
     # returns a NewInteger
     class BitwiseAnd
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -542,11 +584,13 @@ module Model
     # works on a left and right operand
     # returns a NewInteger
     class BitwiseOr
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -569,11 +613,13 @@ module Model
     # works on a left and right operand
     # returns a NewInteger
     class BitwiseXor
-        attr_reader :left, :right
+        attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right)
+        def initialize(left, right, start_index, end_index)
             @left = left
             @right = right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -596,10 +642,12 @@ module Model
     # works on a unary operand
     # returns a NewInteger
     class BitwiseNot
-        attr_reader :operand
+        attr_reader :operand, :start_index, :end_index
 
-        def initialize(operand)
+        def initialize(operand, start_index, end_index)
             @operand = operand
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -621,11 +669,13 @@ module Model
     # works on bits and a shift
     # returns a NewInteger 
     class BitwiseLeftShift
-        attr_reader :bits, :shift
+        attr_reader :bits, :shift, :start_index, :end_index
 
-        def initialize(bits, shift)
+        def initialize(bits, shift, start_index, end_index)
             @bits = bits
             @shift = shift
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -648,11 +698,13 @@ module Model
     # works on bits and a shift
     # returns a NewInteger 
     class BitwiseRightShift
-        attr_reader :bits, :shift
+        attr_reader :bits, :shift, :start_index, :end_index
 
-        def initialize(bits, shift)
+        def initialize(bits, shift, start_index, end_index)
             @bits = bits
             @shift = shift
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate (environment)
@@ -675,10 +727,12 @@ module Model
     # works on any expression that evaluates to a float
     # returns a NewInteger primitive type of equivalent value
     class FloatToInt
-        attr_reader :expression
+        attr_reader :expression, :start_index, :end_index
 
-        def initialize(expression)
+        def initialize(expression, start_index, end_index)
             @expression = expression
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate(environment)
@@ -700,10 +754,12 @@ module Model
     # works on any expression that evaluates to an int
     # returns a NewFloat primitive type of equivalent value
     class IntToFloat
-        attr_reader :expression
+        attr_reader :expression, :start_index, :end_index
 
-        def initialize(expression)
+        def initialize(expression, start_index, end_index)
             @expression = expression
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate(environment)
@@ -726,11 +782,13 @@ module Model
     # returns the max integer or float value found within the cell set
     # !!IMPORTANT!! always returns a float
     class Max
-        attr_reader :top_left, :bottom_right
+        attr_reader :top_left, :bottom_right, :start_index, :end_index
 
-        def initialize(top_left, bottom_right)
+        def initialize(top_left, bottom_right, start_index, end_index)
             @top_left = top_left
             @bottom_right = bottom_right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate(environment)
@@ -777,11 +835,13 @@ module Model
     # returns the min integer or float value found within the cell set
     # !!IMPORTANT!! always returns a float
     class Min
-        attr_reader :top_left, :bottom_right
+        attr_reader :top_left, :bottom_right, :start_index, :end_index
 
-        def initialize(top_left, bottom_right)
+        def initialize(top_left, bottom_right, start_index, end_index)
             @top_left = top_left
             @bottom_right = bottom_right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate(environment)
@@ -828,11 +888,13 @@ module Model
     # returns the mean value of all integer and float values found within the cell set
     # !!IMPORTANT!! always returns a float
     class Mean
-        attr_reader :top_left, :bottom_right
+        attr_reader :top_left, :bottom_right, :start_index, :end_index
 
-        def initialize(top_left, bottom_right)
+        def initialize(top_left, bottom_right, start_index, end_index)
             @top_left = top_left
             @bottom_right = bottom_right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate(environment)
@@ -881,11 +943,13 @@ module Model
     # returns the sum of all integer and float values found within the cell set
     # !!IMPORTANT!! always returns a float
     class Sum
-        attr_reader :top_left, :bottom_right
+        attr_reader :top_left, :bottom_right, :start_index, :end_index
 
-        def initialize(top_left, bottom_right)
+        def initialize(top_left, bottom_right, start_index, end_index)
             @top_left = top_left
             @bottom_right = bottom_right
+            @start_index = start_index
+            @end_index = end_index
         end
 
         def evaluate(environment)

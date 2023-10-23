@@ -5,3 +5,4 @@
 10/9 - Changed Environment's evaluate function to only work on addresses, not Lvalues, Chris raised good points
 10/10 - Changed Lvalue's delimiter char from '&' to '$'
 10/23 - Negative number are to be treated as unary subtraction operations
+10/23 - All Models now take in a start and end index, includes attr_reader
