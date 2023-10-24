@@ -192,7 +192,7 @@ module ParserModule
             #         NewFloat.new(captureFloat(), strt, term)
             #     end
             # end
-            if type?(:string)
+            if type?(:string) # this doesnt eat variable amounts of atoms, should it?
                 term = @tokens[@i].end_index
                 NewString.new(capture(), strt, term)
             elsif type?(:boolean)
