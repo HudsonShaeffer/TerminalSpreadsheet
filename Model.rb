@@ -20,7 +20,7 @@ module Model
         end
 
         def to_s
-            "#{@value}"
+            "#{@value} #{@start_index}-#{@end_index}"
         end
     end
 
@@ -41,7 +41,7 @@ module Model
         end
 
         def to_s
-            "#{@value}"
+            "#{@value} #{@start_index}-#{@end_index}"
         end
     end
 
@@ -62,7 +62,7 @@ module Model
         end
 
         def to_s
-            "#{@value}"
+            "#{@value} #{@start_index}-#{@end_index}"
         end
     end
 
@@ -83,7 +83,7 @@ module Model
         end
 
         def to_s
-            "#{@value}"
+            "#{@value} #{@start_index}-#{@end_index}"
         end 
     end
 
@@ -109,7 +109,7 @@ module Model
         end
 
         def to_s
-            "$[#{@address[0]}, #{@address[1]}]"
+            "$[#{@address[0]}, #{@address[1]}] #{@start_index}-#{@end_index}"
         end
     end
 
@@ -134,7 +134,7 @@ module Model
         end
 
         def to_s
-            "[#{@address[0]}, #{@address[1]}]"
+            "[#{@address[0]}, #{@address[1]}] #{@start_index}-#{@end_index}"
         end
     end
 
@@ -166,7 +166,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} + #{@right})"
+            "(#{@left} + #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -198,7 +198,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} - #{@right})"
+            "(#{@left} - #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -230,7 +230,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} / #{@right})"
+            "(#{@left} / #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -262,7 +262,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} * #{@right})"
+            "(#{@left} * #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -294,7 +294,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} % #{@right})"
+            "(#{@left} % #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -326,7 +326,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} && #{@right})"
+            "(#{@left} && #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -358,7 +358,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} || #{@right})"
+            "(#{@left} || #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -385,7 +385,7 @@ module Model
         end
 
         def to_s
-            "(!#{@operand})"
+            "(!#{@operand}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -410,7 +410,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} == #{@right})"
+            "(#{@left} == #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -435,7 +435,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} != #{@right})"
+            "(#{@left} != #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -463,7 +463,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} < #{@right})"
+            "(#{@left} < #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -491,7 +491,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} <= #{@right})"
+            "(#{@left} <= #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -519,7 +519,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} > #{@right})"
+            "(#{@left} > #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -547,7 +547,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} >= #{@right})"
+            "(#{@left} >= #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -576,7 +576,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} & #{@right})"
+            "(#{@left} & #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -605,7 +605,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} | #{@right})"
+            "(#{@left} | #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -634,7 +634,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} ^ #{@right})"
+            "(#{@left} ^ #{@right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -661,7 +661,7 @@ module Model
         end
 
         def to_s
-            "(~#{@operand})"
+            "(~#{@operand}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -690,7 +690,7 @@ module Model
         end
 
         def to_s
-            "(#{@bits} << #{shift})"
+            "(#{@bits} << #{shift}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -719,7 +719,7 @@ module Model
         end
 
         def to_s
-            "(#{@bits} >> #{shift})"
+            "(#{@bits} >> #{shift}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -746,7 +746,7 @@ module Model
         end
 
         def to_s
-            "((int) #{@expression})"
+            "(int #{@expression}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -773,7 +773,7 @@ module Model
         end
 
         def to_s
-            "((float) #{@expression})"
+            "(float #{@expression}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -826,7 +826,7 @@ module Model
         end
 
         def to_s
-            "max(#{top_left}, #{bottom_right})"
+            "max(#{top_left}, #{bottom_right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -879,7 +879,7 @@ module Model
         end
 
         def to_s
-            "min(#{top_left}, #{bottom_right})"
+            "min(#{top_left}, #{bottom_right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -934,7 +934,7 @@ module Model
         end
 
         def to_s
-            "mean(#{top_left}, #{bottom_right})"
+            "mean(#{top_left}, #{bottom_right}) #{@start_index}-#{@end_index}"
         end
     end
 
@@ -988,7 +988,7 @@ module Model
         end
 
         def to_s
-            "sum(#{top_left}, #{bottom_right})"
+            "sum(#{top_left}, #{bottom_right}) #{@start_index}-#{@end_index}"
         end
     end
 

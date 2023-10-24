@@ -186,7 +186,7 @@ module Lexer
                             if is_t?
                                 capture
                                 $end_index = $i
-                                $token_type = :float_int_cast
+                                $token_type = :to_float_cast
                                 emitToken()
                             else; abandon; end
                         else; abandon; end
@@ -246,7 +246,7 @@ module Lexer
                     if is_t? # munch t of int
                         capture
                         $end_index = $i
-                        $token_type = :int_float_cast
+                        $token_type = :to_int_cast
                         emitToken()
                     else; abandon; end
                 else; abandon; end

@@ -37,8 +37,8 @@ unary       = !casting
             | -casting
             | casting
 
-casting     = (float) atom
-            | (int) atom
+casting     = float atom
+            | int atom
             | atom
 
 atom        = INT
