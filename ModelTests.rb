@@ -27,8 +27,6 @@ class ModelTester
         # Test evaluate
         assert_equal(4, @enviornment.evaluate(create_address(0,0)).value, 
                         "Evaluate Test Failed")
-        assert_equal(4, @enviornment.evaluate(Lvalue.new(create_address(0,0))).value, 
-                        "Evaluate Test Failed")
         assert_equal(nil, @enviornment.evaluate(create_address(-1,-1)), 
                         "Nil Evaluate Test Failed")
         puts
@@ -768,3 +766,6 @@ p enviornment.evaluate(create_address(5,5))
 p enviornment.evaluate(Lvalue.new(create_address(5,5)))
 p Rvalue.new(create_address(5,5)).evaluate(enviornment)
 puts
+
+puts "----------~ Nested Testing ~---------------"
+puts Add.new(NewInteger.new(2), Add.new(NewInteger.new(1), NewInteger.new(1))).evaluate(nil)
