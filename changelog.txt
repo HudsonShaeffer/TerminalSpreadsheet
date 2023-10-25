@@ -1,17 +1,18 @@
-==Model 1 Submitted==
+==== Suggested Changes ====
 10/9 - Fixed Spelling on Environment, I consistently misspelled it as envivornment
 10/9 - Added typechecking for not booleans for ordering operations, not sure why I thought booleans were orderable
 10/9 - Added short curcuit logic to and & or before the evaluate of the right operand
 10/9 - Changed Environment's evaluate function to only work on addresses, not Lvalues, Chris raised good points
 
+==== Established Syntax Changes ====
 10/10 - Changed Lvalue's delimiter char from '&' to '$'
+10/24 - casts work on just the keyword (e.g. "float 1", "int 1.0" instead of "(float) 1")
 
-10/23 - Negative number are to be treated as unary subtraction operations
-
+==== Existing Code Base Changes ====
 10/23 - All Models now take in a start and end index, includes attr_reader
 10/24 - Model's to_s includes start and end index for testing purposes
 10/25 - added default values to the start_index and end_index so i didnt have to rewrite every call within model
 
-10/24 - casts work on just the keyword (e.g. "float 1", "int 1.0" instead of "(float) 1")
-10/24 - refactored casting keywords to be actually understandable at a glance
+==== Coding Challenges ====
+10/23 - Negative number are to be treated as unary subtraction operations
 10/24 - swapped precendence order of casting and unary so that casting negatives is possible
