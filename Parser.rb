@@ -16,10 +16,12 @@ module ParserModule
 
         # expression = logical so logical is first
         def logical
+            outbounds?()
             strt = @tokens[@i].start_index  # store start index of these tree nodes
             left = equals() # init left for base case
             while type?(:logical_and) || type?(:logical_or) # loop over all ands or ors
                 current_operator = get_type() # remember which operand it entered on and inc to next token
+                invalid?()
                 right = equals() # grab right
                 term = right.end_index # grab right index of the right branch of this tree-node
                 if current_operator == :logical_and # check for the stored operand type from type?
@@ -28,14 +30,17 @@ module ParserModule
                     left = Or.new(left, right, strt, term)  # OR tree node
                 end
             end
+            invalid?()
             left # return the node
         end
 
         def equals
+            outbounds?()
             strt = @tokens[@i].start_index
             left = relational()
             while type?(:equals) || type?(:not_equals)
                 current_operator = get_type()
+                invalid?()
                 right = relational()
                 term = right.end_index
                 if current_operator == :equals
@@ -48,10 +53,12 @@ module ParserModule
         end
 
         def relational
+            outbounds?()
             strt = @tokens[@i].start_index
             left = bitcomp()
             while type?(:less_than) || type?(:greater_than) || type?(:less_than_equal) || type?(:greater_than_equal)
                 current_operator = get_type()
+                invalid?()
                 right = bitcomp()
                 term = right.end_index
                 if current_operator == :less_than
@@ -68,10 +75,12 @@ module ParserModule
         end
 
         def bitcomp
+            outbounds?()
             strt = @tokens[@i].start_index
             left = bitshift()
             while type?(:bitwise_and) || type?(:bitwise_or) || type?(:bitwise_xor)
                 current_operator = get_type()
+                invalid?()
                 right = bitshift()
                 term = right.end_index
                 if current_operator == :bitwise_and
@@ -86,10 +95,12 @@ module ParserModule
         end
 
         def bitshift
+            outbounds?()
             strt = @tokens[@i].start_index
             left = sum()
             while type?(:bitshift_left) || type?(:bitshift_right)
                 current_operator = get_type()
+                invalid?()
                 right = sum()
                 term = right.end_index
                 if current_operator == :bitshift_left
@@ -102,10 +113,12 @@ module ParserModule
         end
 
         def sum
+            outbounds?()
             strt = @tokens[@i].start_index
             left = product()
             while type?(:add) || type?(:subtract)
                 current_operator = get_type()
+                invalid?()
                 right = product()
                 term = right.end_index
                 if current_operator == :add
@@ -118,11 +131,13 @@ module ParserModule
         end
 
         def product 
+            outbounds?()
             strt = @tokens[@i].start_index
-            left = unary()
+            left = casting()
             while type?(:multiply) || type?(:divide) || type?(:modulo)
                 current_operator = get_type()
-                right = unary()
+                invalid?()
+                right = casting()
                 term = right.end_index
                 if current_operator == :multiply
                     left = Multiply.new(left, right, strt, term)
@@ -135,12 +150,33 @@ module ParserModule
             left
         end
 
+        def casting
+            outbounds?()
+            strt = @tokens[@i].start_index
+            if type?(:to_int_cast) || type?(:to_float_cast)
+                current_operator = get_type()
+                operand_type = just_get_type()
+                invalid?()
+                operand = unary()
+                term = operand.end_index
+                if current_operator == :to_int_cast
+                    return FloatToInt.new(operand, strt, term)
+                elsif current_operator == :to_float_cast
+                    return IntToFloat.new(operand, strt, term)
+                end
+            else
+                return unary() # of keyword is not found then continue
+            end
+        end
+
         def unary
+            outbounds?()
             strt = @tokens[@i].start_index # grab start index of the unary operator
             if type?(:logical_not) || type?(:bitwise_not) || type?(:subtract)
                 current_operator = get_type() # grap operator type and increment
                 operand_type = just_get_type() # grab operand's type
-                operand = casting() # build right branch
+                invalid?() # check for invaliditiy on the operand
+                operand = atom() # build right branch
                 term = operand.end_index # grab end_index of right branch
                 if current_operator == :logical_not
                     return Not.new(operand, strt, term)
@@ -154,45 +190,17 @@ module ParserModule
                     end
                 end
             else
-                return casting() # of unary op is not found then continue
-            end
-        end
-
-        def casting
-            strt = @tokens[@i].start_index
-            if type?(:to_int_cast) || type?(:to_float_cast)
-                current_operator = get_type()
-                operand_type = just_get_type()
-                operand = atom()
-                term = operand.end_index
-                if current_operator == :to_int_cast
-                    return FloatToInt.new(operand, strt, term)
-                elsif current_operator == :to_float_cast
-                    return IntToFloat.new(operand, strt, term)
-                end
-            else
-                return atom() # of keyword is not found then continue
+                return atom() # of unary op is not found then continue
             end
         end
 
         # Evaluates to: NewInteger, NewFloat, NewBoolean, NewString, 
         #       Lvalue, Rvalue, Max, Min, Mean, Sum, or recurses within parenthesis.
         def atom
+            outbounds?()
+            invalid?()
             strt = @tokens[@i].start_index
-            # while (type?(:string) || type?(:boolean) || type?(:integer) || type?(:float))
-            #     current_type = just_get_type()
-            #     term = @tokens[@i].end_index
-            #     if current_type == :string
-            #         NewString.new(capture(), strt, term)
-            #     elsif current_type == :boolean
-            #         NewBoolean.new(captureBoolean(), strt, term)
-            #     elsif current_type == :integer
-            #         NewInteger.new(captureInt(), strt, term)
-            #     elsif current_type == :float
-            #         NewFloat.new(captureFloat(), strt, term)
-            #     end
-            # end
-            if type?(:string) # this doesnt eat variable amounts of atoms, should it?
+            if type?(:string)
                 term = @tokens[@i].end_index
                 NewString.new(capture(), strt, term)
             elsif type?(:boolean)
@@ -204,8 +212,35 @@ module ParserModule
             elsif type?(:float)
                 term = @tokens[@i].end_index
                 NewFloat.new(captureFloat(), strt, term)
+            elsif type?(:dollar_sign)
+                # call lvalue helper method
+            elsif type?(:open_bracket)
+                # call rvalue helper method
+            elsif type?(:max)
+                
+            elsif type?(:min)
+                
+            elsif type?(:mean)
+                
+            elsif type?(:sum)
+
+            elsif type?(:open_parenthesis)
+
             else
+                puts "This Shouldn't be reachable"
             end
+        end
+
+        #==============================================================================|
+        #                 Auxiliary Parser Methods Below This Point:
+        #==============================================================================|
+
+        def rvalue?
+
+        end
+
+        def lvalue?
+
         end
 
         #==============================================================================|
@@ -218,11 +253,14 @@ module ParserModule
         # check if current token both exists and meets provided type
         def type?(type); inbounds? && @tokens[@i].type == type; end
 
+        # raises err if invalid token is present
+        def invalid?; type?(:invalid_token) ? (raise TypeError.new("Invalid token at [#{@tokens[@i].start_index}...#{@tokens[@i].end_index}]: \"#{capture}\"")) : 0; end
+
+        # raises err if out of bounds
+        def outbounds?; !inbounds?() ? (raise IndexError.new("Ran out of tokens to parse.")) : 0; end
+
         # returns true if I'th token exists
         def inbounds?; @i < @tokens.length; end
-
-        # returns true if I'th token does not exist
-        def outbounds?; !inbounds?; end
 
         # return current token's type and increment to the next token
         def get_type; type = @tokens[@i].type; skip(); type; end
@@ -231,25 +269,13 @@ module ParserModule
         def just_get_type; @tokens[@i].type; end
         
         # return current token's source string
-        def capture
-            src = @tokens[@i].source
-            skip()
-            src
-        end
+        def capture; src = @tokens[@i].source; skip(); src; end
 
         # return current token's source string as an int
-        def captureInt
-            src = @tokens[@i].source.to_i
-            skip()
-            src
-        end
+        def captureInt; capture().to_i; end
 
         # return current token's source string as a float
-        def captureFloat
-            src = @tokens[@i].source.to_f
-            skip()
-            src
-        end
+        def captureFloat; capture().to_f; end
 
         # return current token's source string as a boolean
         def captureBoolean

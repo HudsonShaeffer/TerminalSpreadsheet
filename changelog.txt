@@ -9,3 +9,4 @@
 10/24 - Model's to_s includes start and end index for testing purposes
 10/24 - casts work on just the keyword (e.g. "float 1", "int 1.0" instead of "(float) 1")
 10/24 - refactored casting keywords to be actually understandable at a glance
+10/24 - swapped precendence order of casting and unary so that casting negatives is possible

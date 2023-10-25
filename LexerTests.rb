@@ -50,6 +50,10 @@ class LexerTester
         lex("5<=5").each() { |token| token.to_s}
         lex("5>5").each() { |token| token.to_s}
         lex("5>=5").each() { |token| token.to_s}
+        puts "\nInvalid Token Locations:\n"
+        lex("#4").each() { |token| token.to_s}
+        lex("2#4").each() { |token| token.to_s}
+        lex("2+#").each() { |token| token.to_s}
         puts "\n"
     end
 end

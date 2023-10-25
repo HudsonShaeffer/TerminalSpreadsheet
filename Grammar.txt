@@ -27,18 +27,18 @@ sum         = sum + product
             | sum - product
             | product
 
-product     = product * unary
-            | product / unary
-            | product % unary
-            | unary
-
-unary       = !casting
-            | ~casting
-            | -casting
+product     = product * casting
+            | product / casting
+            | product % casting
             | casting
 
-casting     = float atom
-            | int atom
+casting     = float unary
+            | int unary
+            | unary
+
+unary       = !atom
+            | ~atom
+            | -atom
             | atom
 
 atom        = INT
