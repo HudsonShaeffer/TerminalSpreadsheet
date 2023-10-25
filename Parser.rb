@@ -30,7 +30,7 @@ module ParserModule
                     left = Or.new(left, right, strt, term)  # OR tree node
                 end
             end
-            invalid?()
+            invalid?() # check for validity throws exception
             left # return the node
         end
 
@@ -174,7 +174,7 @@ module ParserModule
             strt = @tokens[@i].start_index # grab start index of the unary operator
             if type?(:logical_not) || type?(:bitwise_not) || type?(:subtract)
                 current_operator = get_type() # grap operator type and increment
-                operand_type = just_get_type() # grab operand's type
+                operand_type = just_get_type() # grab operand's type for negative numbers
                 invalid?() # check for invaliditiy on the operand
                 operand = atom() # build right branch
                 term = operand.end_index # grab end_index of right branch

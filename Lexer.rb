@@ -137,14 +137,14 @@ module Lexer
                     emitToken() #emit integer token
                 end
 
-            elsif is_minus? # ------------------------------ Negative / Subtraction Branch
+            elsif is_minus? # --------------------------------- Negative / Subtraction Branch
                 $start_index = $i
                 capture
                 $end_index = $i
                 $token_type = :subtract
                 emitToken()
 
-            elsif is_t? # -------------------------------- True Boolean Branch
+            elsif is_t? # ------------------------------------- True Boolean Branch
                 $start_index = $i
                 capture
                 if is_true_r? # munch r
@@ -160,7 +160,7 @@ module Lexer
                     else; abandon; end
                 else; abandon; end
 
-            elsif is_f? # ------------------------------- False Boolean Branch
+            elsif is_f? # ------------------------------------- False Boolean Branch
                 $start_index = $i
                 capture
                 if is_false_a? # munch a
@@ -251,7 +251,7 @@ module Lexer
                     else; abandon; end
                 else; abandon; end
 
-            elsif is_dollar? # ----------------------------- Ampersand Branch
+            elsif is_dollar? # -------------------------------- Ampersand Branch
                 $start_index = $i
                 capture
                 $end_index = $i 

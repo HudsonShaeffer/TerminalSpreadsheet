@@ -11,7 +11,7 @@
 ==== Existing Code Base Changes ====
 10/23 - All Models now take in a start and end index, includes attr_reader
 10/24 - Model's to_s includes start and end index for testing purposes
-10/25 - added default values to the start_index and end_index so i didnt have to rewrite every call within model
+10/25 - added default value of 0 to the start_index and end_index so i didnt have to rewrite every call within model
 
 ==== Coding Challenges ====
 10/23 - Negative number are to be treated as unary subtraction operations
