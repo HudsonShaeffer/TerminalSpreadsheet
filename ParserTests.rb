@@ -43,6 +43,7 @@ puts parser.parse(lex("Min($[0,0],$[0,0])"))
 puts parser.parse(lex("Mean($[0,0],$[0,0])"))
 puts parser.parse(lex("Sum($[0,0],$[0,0])"))
 puts parser.parse(lex("2*(1+1)"))
+puts parser.parse(lex("2*(1+1)")).evaluate(nil)
 # invalid token
 # puts parser.parse(lex("#"))
 # unexpected token within syntax

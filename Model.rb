@@ -9,7 +9,7 @@ module Model
     class NewInteger
         attr_reader :value, :start_index, :end_index
 
-        def initialize(value, start_index, end_index)
+        def initialize(value, start_index = 0, end_index = 0)
             @value = value
             @start_index = start_index
             @end_index = end_index
@@ -20,7 +20,7 @@ module Model
         end
 
         def to_s
-            "#{@value} #{@start_index}-#{@end_index}"
+            "#{@value} {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -30,7 +30,7 @@ module Model
     class NewFloat
         attr_reader :value, :start_index, :end_index
 
-        def initialize(value, start_index, end_index)
+        def initialize(value, start_index = 0, end_index = 0)
             @value = value
             @start_index = start_index
             @end_index = end_index
@@ -41,7 +41,7 @@ module Model
         end
 
         def to_s
-            "#{@value} #{@start_index}-#{@end_index}"
+            "#{@value} {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -51,7 +51,7 @@ module Model
     class NewBoolean
         attr_reader :value, :start_index, :end_index
 
-        def initialize(value, start_index, end_index)
+        def initialize(value, start_index = 0, end_index = 0)
             @value = value
             @start_index = start_index
             @end_index = end_index
@@ -62,7 +62,7 @@ module Model
         end
 
         def to_s
-            "#{@value} #{@start_index}-#{@end_index}"
+            "#{@value} {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -72,7 +72,7 @@ module Model
     class NewString
         attr_reader :value, :start_index, :end_index
 
-        def initialize(value, start_index, end_index)
+        def initialize(value, start_index = 0, end_index = 0)
             @value = value
             @start_index = start_index
             @end_index = end_index
@@ -83,7 +83,7 @@ module Model
         end
 
         def to_s
-            "#{@value} #{@start_index}-#{@end_index}"
+            "#{@value} {#{@start_index}-#{@end_index}}"
         end 
     end
 
@@ -98,7 +98,7 @@ module Model
     class Lvalue
         attr_reader :address, :start_index, :end_index
 
-        def initialize(address, start_index, end_index)
+        def initialize(address, start_index = 0, end_index = 0)
             @address = address
             @start_index = start_index
             @end_index = end_index
@@ -109,7 +109,7 @@ module Model
         end
 
         def to_s
-            "$[#{@address[0]}, #{@address[1]}] #{@start_index}-#{@end_index}"
+            "$[#{@address[0]}, #{@address[1]}] {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -119,7 +119,7 @@ module Model
     class Rvalue
         attr_reader :address, :start_index, :end_index
 
-        def initialize(address, start_index, end_index)
+        def initialize(address, start_index = 0, end_index = 0)
             @address = address
             @start_index = start_index
             @end_index = end_index
@@ -134,7 +134,7 @@ module Model
         end
 
         def to_s
-            "[#{@address[0]}, #{@address[1]}] #{@start_index}-#{@end_index}"
+            "[#{@address[0]}, #{@address[1]}] {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -144,7 +144,7 @@ module Model
     class Add
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -166,7 +166,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} + #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} + #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -176,7 +176,7 @@ module Model
     class Subtract
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -198,7 +198,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} - #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} - #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -208,7 +208,7 @@ module Model
     class Divide
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -230,7 +230,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} / #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} / #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -240,7 +240,7 @@ module Model
     class Multiply
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -262,7 +262,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} * #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} * #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -272,7 +272,7 @@ module Model
     class Modulo
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -294,7 +294,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} % #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} % #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -304,7 +304,7 @@ module Model
     class And
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -315,7 +315,7 @@ module Model
             # evaulate left and right into primitives
             left_primitive = @left.evaluate(environment)
             if left_primitive.value == false
-                return NewBoolean(false)
+                return NewBoolean.new(false)
             end
             right_primitive = @right.evaluate(environment)
             # validate type
@@ -326,7 +326,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} && #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} && #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -336,7 +336,7 @@ module Model
     class Or
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -347,7 +347,7 @@ module Model
             # evaulate left and right into primitives
             left_primitive = @left.evaluate(environment)
             if left_primitive.value == true
-                return NewBoolean(true)
+                return NewBoolean.new(true)
             end
             right_primitive = @right.evaluate(environment)
             # validate type
@@ -358,7 +358,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} || #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} || #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -368,7 +368,7 @@ module Model
     class Not
         attr_reader :operand, :start_index, :end_index
 
-        def initialize(operand, start_index, end_index)
+        def initialize(operand, start_index = 0, end_index = 0)
             @operand = operand
             @start_index = start_index
             @end_index = end_index
@@ -385,7 +385,7 @@ module Model
         end
 
         def to_s
-            "(!#{@operand}) #{@start_index}-#{@end_index}"
+            "(!#{@operand}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -395,7 +395,7 @@ module Model
     class Equals
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -410,7 +410,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} == #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} == #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -420,7 +420,7 @@ module Model
     class NotEquals
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -435,7 +435,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} != #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} != #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -445,7 +445,7 @@ module Model
     class LessThan
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -463,7 +463,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} < #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} < #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -473,7 +473,7 @@ module Model
     class LessThanEqual
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -491,7 +491,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} <= #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} <= #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -501,7 +501,7 @@ module Model
     class GreaterThan
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -519,7 +519,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} > #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} > #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -529,7 +529,7 @@ module Model
     class GreaterThanEqual
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -547,7 +547,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} >= #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} >= #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -557,7 +557,7 @@ module Model
     class BitwiseAnd
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -576,7 +576,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} & #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} & #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -586,7 +586,7 @@ module Model
     class BitwiseOr
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -605,7 +605,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} | #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} | #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -615,7 +615,7 @@ module Model
     class BitwiseXor
         attr_reader :left, :right, :start_index, :end_index
 
-        def initialize(left, right, start_index, end_index)
+        def initialize(left, right, start_index = 0, end_index = 0)
             @left = left
             @right = right
             @start_index = start_index
@@ -634,7 +634,7 @@ module Model
         end
 
         def to_s
-            "(#{@left} ^ #{@right}) #{@start_index}-#{@end_index}"
+            "(#{@left} ^ #{@right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -644,7 +644,7 @@ module Model
     class BitwiseNot
         attr_reader :operand, :start_index, :end_index
 
-        def initialize(operand, start_index, end_index)
+        def initialize(operand, start_index = 0, end_index = 0)
             @operand = operand
             @start_index = start_index
             @end_index = end_index
@@ -661,7 +661,7 @@ module Model
         end
 
         def to_s
-            "(~#{@operand}) #{@start_index}-#{@end_index}"
+            "(~#{@operand}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -671,7 +671,7 @@ module Model
     class BitwiseLeftShift
         attr_reader :bits, :shift, :start_index, :end_index
 
-        def initialize(bits, shift, start_index, end_index)
+        def initialize(bits, shift, start_index = 0, end_index = 0)
             @bits = bits
             @shift = shift
             @start_index = start_index
@@ -690,7 +690,7 @@ module Model
         end
 
         def to_s
-            "(#{@bits} << #{shift}) #{@start_index}-#{@end_index}"
+            "(#{@bits} << #{shift}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -700,7 +700,7 @@ module Model
     class BitwiseRightShift
         attr_reader :bits, :shift, :start_index, :end_index
 
-        def initialize(bits, shift, start_index, end_index)
+        def initialize(bits, shift, start_index = 0, end_index = 0)
             @bits = bits
             @shift = shift
             @start_index = start_index
@@ -719,7 +719,7 @@ module Model
         end
 
         def to_s
-            "(#{@bits} >> #{shift}) #{@start_index}-#{@end_index}"
+            "(#{@bits} >> #{shift}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -729,7 +729,7 @@ module Model
     class FloatToInt
         attr_reader :expression, :start_index, :end_index
 
-        def initialize(expression, start_index, end_index)
+        def initialize(expression, start_index = 0, end_index = 0)
             @expression = expression
             @start_index = start_index
             @end_index = end_index
@@ -746,7 +746,7 @@ module Model
         end
 
         def to_s
-            "(int #{@expression}) #{@start_index}-#{@end_index}"
+            "(int #{@expression}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -756,7 +756,7 @@ module Model
     class IntToFloat
         attr_reader :expression, :start_index, :end_index
 
-        def initialize(expression, start_index, end_index)
+        def initialize(expression, start_index = 0, end_index = 0)
             @expression = expression
             @start_index = start_index
             @end_index = end_index
@@ -773,7 +773,7 @@ module Model
         end
 
         def to_s
-            "(float #{@expression}) #{@start_index}-#{@end_index}"
+            "(float #{@expression}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -784,7 +784,7 @@ module Model
     class Max
         attr_reader :top_left, :bottom_right, :start_index, :end_index
 
-        def initialize(top_left, bottom_right, start_index, end_index)
+        def initialize(top_left, bottom_right, start_index = 0, end_index = 0)
             @top_left = top_left
             @bottom_right = bottom_right
             @start_index = start_index
@@ -826,7 +826,7 @@ module Model
         end
 
         def to_s
-            "max(#{top_left}, #{bottom_right}) #{@start_index}-#{@end_index}"
+            "max(#{top_left}, #{bottom_right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -837,7 +837,7 @@ module Model
     class Min
         attr_reader :top_left, :bottom_right, :start_index, :end_index
 
-        def initialize(top_left, bottom_right, start_index, end_index)
+        def initialize(top_left, bottom_right, start_index = 0, end_index = 0)
             @top_left = top_left
             @bottom_right = bottom_right
             @start_index = start_index
@@ -879,7 +879,7 @@ module Model
         end
 
         def to_s
-            "min(#{top_left}, #{bottom_right}) #{@start_index}-#{@end_index}"
+            "min(#{top_left}, #{bottom_right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -890,7 +890,7 @@ module Model
     class Mean
         attr_reader :top_left, :bottom_right, :start_index, :end_index
 
-        def initialize(top_left, bottom_right, start_index, end_index)
+        def initialize(top_left, bottom_right, start_index = 0, end_index = 0)
             @top_left = top_left
             @bottom_right = bottom_right
             @start_index = start_index
@@ -934,7 +934,7 @@ module Model
         end
 
         def to_s
-            "mean(#{top_left}, #{bottom_right}) #{@start_index}-#{@end_index}"
+            "mean(#{top_left}, #{bottom_right}) {#{@start_index}-#{@end_index}}"
         end
     end
 
@@ -945,7 +945,7 @@ module Model
     class Sum
         attr_reader :top_left, :bottom_right, :start_index, :end_index
 
-        def initialize(top_left, bottom_right, start_index, end_index)
+        def initialize(top_left, bottom_right, start_index = 0, end_index = 0)
             @top_left = top_left
             @bottom_right = bottom_right
             @start_index = start_index
@@ -988,7 +988,7 @@ module Model
         end
 
         def to_s
-            "sum(#{top_left}, #{bottom_right}) #{@start_index}-#{@end_index}"
+            "sum(#{top_left}, #{bottom_right}) {#{@start_index}-#{@end_index}}"
         end
     end
 

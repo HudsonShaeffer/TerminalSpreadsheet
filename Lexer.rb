@@ -55,7 +55,7 @@ module Lexer
 
         # Check if current character is a valid keyword character (not case sensitive)
         def is_m?; $i < $expression.length && ($expression[$i] == 'm' || $expression[$i] == 'M'); end; 
-        def is_a?; $i < $expression.length && ($expression[$i] == 'a' || $expression[$i] == 'A'); end; 
+        def is_char_a?; $i < $expression.length && ($expression[$i] == 'a' || $expression[$i] == 'A'); end; 
         def is_e?; $i < $expression.length && ($expression[$i] == 'e' || $expression[$i] == 'E'); end;
         def is_i?; $i < $expression.length && ($expression[$i] == 'i' || $expression[$i] == 'I'); end; 
         def is_n?; $i < $expression.length && ($expression[$i] == 'n' || $expression[$i] == 'N'); end; 
@@ -181,7 +181,7 @@ module Lexer
                     capture
                     if is_o? # munch o of float
                         capture
-                        if is_a? # munch a of float
+                        if is_char_a? # munch a of float
                             capture
                             if is_t?
                                 capture
@@ -196,7 +196,7 @@ module Lexer
             elsif is_m? # ------------------------------------- Max, Min, & Mean Keyword Branch
                 $start_index = $i
                 capture
-                if is_a? # munch a for max
+                if is_char_a? # munch a for max
                     capture
                     if is_x? # munch x for max
                         capture
@@ -214,7 +214,7 @@ module Lexer
                     else; abandon; end
                 elsif is_e? # munch e for mean
                     capture
-                    if is_a? # munch a for mean
+                    if is_char_a? # munch a for mean
                         capture
                         if is_n? # munch n for mean
                             capture

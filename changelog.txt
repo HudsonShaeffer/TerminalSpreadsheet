@@ -10,3 +10,4 @@
 10/24 - casts work on just the keyword (e.g. "float 1", "int 1.0" instead of "(float) 1")
 10/24 - refactored casting keywords to be actually understandable at a glance
 10/24 - swapped precendence order of casting and unary so that casting negatives is possible
+10/24 - added default values to the start_index and end_index so i didnt have to rewrite every call within model
