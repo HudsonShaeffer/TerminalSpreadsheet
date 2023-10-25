@@ -202,30 +202,43 @@ module ParserModule
             strt = @tokens[@i].start_index
             if type?(:string)
                 term = @tokens[@i].end_index
-                NewString.new(capture(), strt, term)
+                return NewString.new(capture(), strt, term)
             elsif type?(:boolean)
                 term = @tokens[@i].end_index
-                NewBoolean.new(captureBoolean(), strt, term)
+                return NewBoolean.new(captureBoolean(), strt, term)
             elsif type?(:integer)
                 term = @tokens[@i].end_index
-                NewInteger.new(captureInt(), strt, term)
+                return NewInteger.new(captureInt(), strt, term)
             elsif type?(:float)
                 term = @tokens[@i].end_index
-                NewFloat.new(captureFloat(), strt, term)
+                return NewFloat.new(captureFloat(), strt, term)
+
             elsif type?(:dollar_sign)
-                # call lvalue helper method
+                return munch_lvalue()
             elsif type?(:open_bracket)
-                # call rvalue helper method
+                return munch_rvalue()
+
             elsif type?(:max)
-                
+                skip()
+                return munch_stat(strt, :max)
             elsif type?(:min)
-                
+                skip()
+                return munch_stat(strt, :min)
             elsif type?(:mean)
-                
+                skip()
+                return munch_stat(strt, :mean)
             elsif type?(:sum)
+                skip()
+                return munch_stat(strt, :sum)
 
             elsif type?(:open_parenthesis)
-
+                skip()
+                expression = logical()
+                if type?(:close_parenthesis)
+                    term = @tokens[@i].end_index
+                    skip()
+                    return expression
+                else; unexpected(); end
             else
                 puts "This Shouldn't be reachable"
             end
@@ -235,12 +248,78 @@ module ParserModule
         #                 Auxiliary Parser Methods Below This Point:
         #==============================================================================|
 
-        def rvalue?
-
+        # syntax checks for the factors of an rvalue and returns an rvalue
+        def munch_rvalue
+            strt = @tokens[@i].start_index
+            if type?(:open_bracket)
+                skip()
+                if type?(:integer)
+                    x = captureInt()
+                    if type?(:comma)
+                        skip()
+                        if type?(:integer)
+                            y = captureInt()
+                            if type?(:close_bracket)
+                                term = @tokens[@i].end_index
+                                skip()
+                                return Rvalue.new(create_address(x,y), strt, term)
+                            else; unexpected(); end
+                        else; unexpected(); end
+                    else; unexpected(); end
+                else; unexpected(); end
+            end # if rvalue has yet to be initiated then no need to raise exception
         end
 
-        def lvalue?
+        # syntax checks for the factors of an lvalue and returns an lvalue
+        def munch_lvalue
+            strt = @tokens[@i].start_index
+            if type?(:dollar_sign)
+                skip()
+                if type?(:open_bracket)
+                    skip()
+                    if type?(:integer)
+                        x = captureInt()
+                        if type?(:comma)
+                            skip()
+                            if type?(:integer)
+                                y = captureInt()
+                                if type?(:close_bracket)
+                                    term = @tokens[@i].end_index
+                                    skip()
+                                    return Lvalue.new(create_address(x,y), strt, term)
+                                else; unexpected(); end
+                            else; unexpected(); end
+                        else; unexpected(); end
+                    else; unexpected(); end
+                else; unexpected(); end
+            end # if rvalue has yet to be initiated then no need to raise exception
+        end
 
+        # syntax checks for the factors of a stat function call and returns a stat function
+        def munch_stat(strt, operation)
+            if type?(:open_parenthesis)
+                skip()
+                top_left = munch_lvalue()
+                if type?(:comma)
+                    skip()
+                    bottom_right = munch_lvalue()
+                    if type?(:close_parenthesis)
+                        term = @tokens[@i].end_index
+                        skip()
+                        case operation
+                        when :max   
+                            return Max.new(top_left, bottom_right, strt, term)
+                        when :min    
+                            return Min.new(top_left, bottom_right, strt, term)
+                        when :mean    
+                            return Mean.new(top_left, bottom_right, strt, term)
+                        when :sum
+                            return Sum.new(top_left, bottom_right, strt, term)
+                        else
+                        end
+                    else; unexpected(); end
+                else; unexpected(); end
+            else; unexpected(); end
         end
 
         #==============================================================================|
@@ -256,8 +335,10 @@ module ParserModule
         # raises err if invalid token is present
         def invalid?; type?(:invalid_token) ? (raise TypeError.new("Invalid token at [#{@tokens[@i].start_index}...#{@tokens[@i].end_index}]: \"#{capture}\"")) : 0; end
 
+        def unexpected; outbounds?; raise TypeError.new("Unexpected token at [#{@tokens[@i].start_index}...#{@tokens[@i].end_index}]: \"#{capture}\""); end;
+
         # raises err if out of bounds
-        def outbounds?; !inbounds?() ? (raise IndexError.new("Ran out of tokens to parse.")) : 0; end
+        def outbounds?; !inbounds?() ? (raise IndexError.new("Ran out of tokens to parse at #{@i}.")) : 0; end
 
         # returns true if I'th token exists
         def inbounds?; @i < @tokens.length; end
