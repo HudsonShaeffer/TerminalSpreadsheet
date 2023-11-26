@@ -763,7 +763,7 @@ grid.place(create_address(5,5), FloatToInt.new(NewFloat.new(6.4)))
 p enviornment.evaluate(create_address(5,5))
 
 # Demonstrate that cell references work
-p enviornment.evaluate(Lvalue.new(create_address(5,5)))
+p enviornment.evaluate(create_address(5,5))
 p Rvalue.new(create_address(5,5)).evaluate(enviornment)
 puts
 

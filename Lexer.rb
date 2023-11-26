@@ -108,13 +108,17 @@ module Lexer
             elsif is_quote? # --------------------------------- String Primitive Branch
                 $start_index = $i
                 capture
-                while !is_quote? # munch all chars up until the closing quote
+                while $i < $expression.length && !is_quote? # munch all chars up until the closing quote
                     capture
                 end
                 # munch closing quote
-                capture
+                if $i < $expression.length
+                    capture
+                    $token_type = :string
+                else 
+                    $token_type = :invalid_token
+                end
                 $end_index = $i
-                $token_type = :string
                 emitToken() # emit string token
 
             elsif is_digit? # --------------------------------- Positive Float/Integer Primitives Branch

@@ -19,6 +19,10 @@ module Model
             self
         end
 
+        def display
+            "#{@value}"
+        end
+
         def to_s
             "#{@value} {#{@start_index}-#{@end_index}}"
         end
@@ -38,6 +42,10 @@ module Model
 
         def evaluate (environment)
             self
+        end
+
+        def display
+            "#{@value}"
         end
 
         def to_s
@@ -61,6 +69,10 @@ module Model
             self
         end
 
+        def display
+            "#{@value}"
+        end
+
         def to_s
             "#{@value} {#{@start_index}-#{@end_index}}"
         end
@@ -80,6 +92,10 @@ module Model
 
         def evaluate (environment)
             self
+        end
+
+        def display
+            "#{@value}"
         end
 
         def to_s
@@ -105,7 +121,11 @@ module Model
         end
 
         def evaluate (environment)
-            @address
+            self
+        end
+
+        def display
+            "$[#{@address[0]}, #{@address[1]}]"
         end
 
         def to_s
@@ -131,6 +151,10 @@ module Model
                 raise UninitializedCellError.new("Rvalue: Attempted to retrieve an uninitialized cell")
             end
             return expression.evaluate(@address)
+        end
+
+        def display
+            "[#{@address[0]}, #{@address[1]}]"
         end
 
         def to_s
@@ -863,7 +887,7 @@ module Model
                             primitive = environment.evaluate(create_address(x,y))
                             # check if this cell is filled
                             if primitive == nil
-                                raise UninitializedCellError.new("Max: Came across an uninitialized cell.")
+                                raise UninitializedCellError.new("Min: Came across an uninitialized cell.")
                             end
                             # verify that primitive is a valid type & if the new value is the new min
                             if (primitive.is_a?(NewInteger) || primitive.is_a?(NewFloat)) && primitive.value < min
@@ -916,7 +940,7 @@ module Model
                             primitive = environment.evaluate(create_address(x,y))
                             # check if this cell is filled
                             if primitive == nil
-                                raise UninitializedCellError.new("Max: Came across an uninitialized cell.")
+                                raise UninitializedCellError.new("Mean: Came across an uninitialized cell.")
                             end
                             # verify that primitive is a valid type
                             if (primitive.is_a?(NewInteger) || primitive.is_a?(NewFloat))
@@ -971,7 +995,7 @@ module Model
                             primitive = environment.evaluate(create_address(x,y))
                             # check if this cell is filled
                             if primitive == nil
-                                raise UninitializedCellError.new("Max: Came across an uninitialized cell.")
+                                raise UninitializedCellError.new("Sum: Came across an uninitialized cell.")
                             end
                             # verify that primitive is a valid type
                             if (primitive.is_a?(NewInteger) || primitive.is_a?(NewFloat))
@@ -1006,8 +1030,7 @@ module Model
         def evaluate(address)
             expression = @gridRef.retrieve(address)
             if expression != nil
-                primitive = expression.evaluate(self)
-                return primitive
+                return expression
             end
             # if retrieve returns nil then pass it along
             return nil
