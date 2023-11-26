@@ -2,5 +2,7 @@
 11/22 - added a display method where needed, acts as a to_s but without debug info
 11/22 - changed Lvalue's evaulate to return self instead of the address, this results in no other changes
 11/23 - fix lexer to flag a string has no trailing quote as an invalid_token
+11/26 - added zero-division catching in the divide evaluate function
 
 ==== Coding Challenges ====
+2 grids, one evaluated one unevaluated

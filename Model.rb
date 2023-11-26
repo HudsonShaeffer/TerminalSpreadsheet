@@ -244,12 +244,16 @@ module Model
             left_primitive = @left.evaluate(environment)
             right_primitive = @right.evaluate(environment)
             # validate type float
-            if left_primitive.is_a?(NewFloat) && right_primitive.is_a?(NewFloat)
-                return NewFloat.new(left_primitive.value / right_primitive.value)
-            # validate type integer
-            elsif left_primitive.is_a?(NewInteger) && right_primitive.is_a?(NewInteger)
-                return NewInteger.new(left_primitive.value / right_primitive.value)
-            end 
+            begin
+                if left_primitive.is_a?(NewFloat) && right_primitive.is_a?(NewFloat)
+                    return NewFloat.new(left_primitive.value / right_primitive.value)
+                # validate type integer
+                elsif left_primitive.is_a?(NewInteger) && right_primitive.is_a?(NewInteger)
+                    return NewInteger.new(left_primitive.value / right_primitive.value)
+                end 
+            rescue ZeroDivisionError
+                raise TypeError.new("Divide: Attempted to Divide by 0")
+            end
             raise TypeError.new("Divide: Failed to evaluate expression")
         end
 
