@@ -146,7 +146,7 @@ module Model
         end
 
         def evaluate (environment)
-            expression = environment.evaluate(@address)
+            expression = environment.evaluate(create_address(0,0))
             if expression == nil
                 raise UninitializedCellError.new("Rvalue: Attempted to retrieve an uninitialized cell")
             end
@@ -1033,11 +1033,8 @@ module Model
 
         def evaluate(address)
             expression = @gridRef.retrieve(address)
-            if expression != nil
-                return expression
-            end
+            return expression
             # if retrieve returns nil then pass it along
-            return nil
         end
     end
 

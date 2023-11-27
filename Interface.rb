@@ -9,14 +9,17 @@ include Lexer
 include Tokens
 include Model
 
-# init 3 screens and constants
+# Runtime loop
 begin
+
+    # ========================================================== CONSTANTS declaration | Start
+
     init_screen
     noecho
     crmode
 
     # constants
-    INSTRUCTIONS = "\'Enter\' to edit a cell's contents | \'Backspace/Delete\'"
+    INSTRUCTIONS = "\'W/A/S/D\' to navigate | \'Enter\' to edit | \'Backspace\' to delete | \'Escape\' to exit"
     EDITOR_LINES = 3                                    # height of the EDITOR_WINDOW
     GRID_LINES = (lines - EDITOR_LINES) / 3 * 3 + 2     # height of the GRID_WINDOW
     ERROR_LINES = 4                                     # height of the error_window
@@ -38,9 +41,9 @@ begin
     cur_char = -1       # invalid cur_char placeholder
     cur_address = [0,0] # x, y coords; inverted from how curses deals with it
     cur_contents = ""   # contents of [0,0] is empty at init
-    unevaluated_grid = Grid.new     # unevaluated grid
-    evaluated_grid = Grid.new     # evaluated grid + enviornment declaration
-    env = Environment.new(evaluated_grid)
+    UNEVALUATED_GRID = Grid.new     # unevaluated grid
+    EVALUATED_GRID = Grid.new       # evaluated grid + enviornment is based on the evaluateddeclaration
+    env = Environment.new(EVALUATED_GRID)
     parser = Parser.new # parser
 
     # Make grid parent window & the editor subwindow
@@ -51,11 +54,11 @@ begin
     BACKSPACE = 8
     ENTER = 10
     ESCAPE = 27
-end
 
-# Runtime loop
-begin
+    # ========================================================== CONSTANTS declaration | End
+
     # ========================================================== GRID_WINDOW Render | Start
+
     for i in EDITOR_LINES + 1...GRID_LINES
         if i - 1 == EDITOR_LINES        # top row
             GRID_WINDOW.setpos(i, 0)
@@ -101,18 +104,18 @@ begin
         EDITOR_WINDOW.clear                                     # clear editor window before attempting to update
         EDITOR_WINDOW.refresh                                   # update editor window
 
-        if unevaluated_grid.retrieve(cur_address) != nil && evaluated_grid.retrieve(cur_address) != nil && evaluated_grid.retrieve(cur_address) != ""    # if there is cell contents
-            EDITOR_WINDOW.addstr(unevaluated_grid.retrieve(cur_address))                        # display unevaulated cell contents in the editor window
+        if UNEVALUATED_GRID.retrieve(cur_address) != nil && EVALUATED_GRID.retrieve(cur_address) != nil && EVALUATED_GRID.retrieve(cur_address) != ""    # if there is cell contents
+            EDITOR_WINDOW.addstr(UNEVALUATED_GRID.retrieve(cur_address))                        # display unevaulated cell contents in the editor window
             EDITOR_WINDOW.refresh                                                   # update editor window
 
             GRID_WINDOW.setpos(cur_line, cur_col)               # enter current cell
 
-            if evaluated_grid.retrieve(cur_address).is_a?(NewInteger) && evaluated_grid.retrieve(cur_address).value == 0
+            if EVALUATED_GRID.retrieve(cur_address).is_a?(NewInteger) && EVALUATED_GRID.retrieve(cur_address).value == 0
 
                     for i in 0...CELL_MAX_LEN                           # up to 9 chars displayed total
-                        if unevaluated_grid.retrieve(cur_address)[i] != nil                         # if there is a char to print
+                        if UNEVALUATED_GRID.retrieve(cur_address)[i] != nil                         # if there is a char to print
                             if (i < CONTENTS_MAX_LEN)                   # display first 6 chars normally
-                                GRID_WINDOW.addch(unevaluated_grid.retrieve(cur_address)[i])        # display evaluated cell contents in the cell
+                                GRID_WINDOW.addch(UNEVALUATED_GRID.retrieve(cur_address)[i])        # display evaluated cell contents in the cell
                             else                                        # mask last 3 chars as '.' to show that
                                 GRID_WINDOW.addch('.')                  #   not all contents are being displayed
                             end
@@ -122,7 +125,10 @@ begin
             else
                 begin       # Attempt to display evaulated cell contents within cell
 
-                    expression = evaluated_grid.retrieve(cur_address).evaluate(env).display
+                    expression = EVALUATED_GRID.retrieve(cur_address).evaluate(env).to_s
+                    if EVALUATED_GRID.retrieve(cur_address) != env.evaluate(cur_address)
+                        raise TypeError "fuck"
+                    end
 
                     for i in 0...CELL_MAX_LEN                           # up to 9 chars displayed total
                         if expression[i] != nil                         # if there is a char to print
@@ -170,8 +176,8 @@ begin
                     error_window.getch
                     error_window.clear
                     error_window.refresh
-                    unevaluated_grid.place(cur_address, nil)
-                    evaluated_grid.place(cur_address, nil)
+                    UNEVALUATED_GRID.place(cur_address, nil)
+                    EVALUATED_GRID.place(cur_address, nil)
                     error_window.close
 
                 end
@@ -198,9 +204,9 @@ begin
             EDITOR_WINDOW.refresh
 
             cur_char = -1                                   # set cur_char so that its able to enter the editor loop
-            if evaluated_grid.retrieve(cur_address) != nil            # update cur_contents to match current cell
-                cur_contents = unevaluated_grid.retrieve(cur_address)
-                EDITOR_WINDOW.addstr(unevaluated_grid.retrieve(cur_address))
+            if EVALUATED_GRID.retrieve(cur_address) != nil            # update cur_contents to match current cell
+                cur_contents = UNEVALUATED_GRID.retrieve(cur_address)
+                EDITOR_WINDOW.addstr(UNEVALUATED_GRID.retrieve(cur_address))
             else
                 cur_contents = ''
             end
@@ -228,11 +234,11 @@ begin
 
                 elsif cur_char == ENTER                                 # Branch for Enter
                     flash                                   # flash for visual indication
-                    unevaluated_grid.place(cur_address, cur_contents)       # update grid hashmap
+                    UNEVALUATED_GRID.place(cur_address, cur_contents)       # update grid hashmap
 
                     if cur_contents != "" && cur_contents[0] == "="
                         begin
-                            evaluated_grid.place(cur_address, parser.parse(lex(cur_contents[1..-1])))
+                            EVALUATED_GRID.place(cur_address, parser.parse(lex(cur_contents[1..-1])))
                         rescue TypeError, IndexError, UninitializedCellError => e   # catch the 3 possible errors
                             # =================================================== error_window Render | Start
         
@@ -269,14 +275,14 @@ begin
                             error_window.getch
                             error_window.clear
                             error_window.refresh
-                            unevaluated_grid.place(cur_address, nil)
-                            evaluated_grid.place(cur_address, nil)
+                            UNEVALUATED_GRID.place(cur_address, nil)
+                            EVALUATED_GRID.place(cur_address, nil)
                             error_window.close
 
         
                         end
                     else
-                        evaluated_grid.place(cur_address, NewInteger.new(0))
+                        EVALUATED_GRID.place(cur_address, NewInteger.new(0))
                     end
                     cur_contents = ''                       # clear out the cur_contents buffer
                     # Editor loop will then exit
@@ -301,8 +307,8 @@ begin
 
         elsif cur_char == BACKSPACE
 
-            unevaluated_grid.place(cur_address, nil)
-            evaluated_grid.place(cur_address, nil)
+            UNEVALUATED_GRID.place(cur_address, nil)
+            EVALUATED_GRID.place(cur_address, nil)
 
         # =================================================== Edit Cell Contents | End
 
