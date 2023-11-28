@@ -108,6 +108,10 @@ module Model
         [x,y]
     end
 
+    def copy_address(address)
+        [address[0],address[1]]
+    end
+
     # Lvalue: Cell Reference
     # works on an address and stores a value intended to be used as a cell address
     # returns the address of the cell
