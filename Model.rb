@@ -146,7 +146,7 @@ module Model
         end
 
         def evaluate (environment)
-            expression = environment.evaluate(create_address(0,0))
+            expression = environment.evaluate(@address)
             if expression == nil
                 raise UninitializedCellError.new("Rvalue: Attempted to retrieve an uninitialized cell")
             end

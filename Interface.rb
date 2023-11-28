@@ -125,14 +125,14 @@ begin
             else
                 begin       # Attempt to display evaulated cell contents within cell
 
-                    expression = EVALUATED_GRID.retrieve(cur_address).evaluate(env).to_s
                     if EVALUATED_GRID.retrieve(cur_address) != env.evaluate(cur_address)
                         raise TypeError "fuck"
                     end
+                    expression = EVALUATED_GRID.retrieve(cur_address).evaluate(env).display
 
                     for i in 0...CELL_MAX_LEN                           # up to 9 chars displayed total
                         if expression[i] != nil                         # if there is a char to print
-                            if i < CONTENTS_MAX_LEN                   # display first 6 chars normally
+                            if i < CONTENTS_MAX_LEN                     # display first 6 chars normally
                                 GRID_WINDOW.addch(expression[i])        # display evaluated cell contents in the cell
                             else                                        # mask last 3 chars as '.' to show that
                                 GRID_WINDOW.addch('.')                  #   not all contents are being displayed
@@ -179,6 +179,14 @@ begin
                     UNEVALUATED_GRID.place(cur_address, nil)
                     EVALUATED_GRID.place(cur_address, nil)
                     error_window.close
+
+                    GRID_WINDOW.setpos(cur_line, cur_col)                   # enter current cell
+                    GRID_WINDOW.addstr(' '*9)                               # clear cell contents
+                    GRID_WINDOW.refresh                                     # update grid window
+
+                    EDITOR_WINDOW.setpos(0, 0)                              # Enter editor window
+                    EDITOR_WINDOW.clear                                     # clear editor window
+                    EDITOR_WINDOW.refresh                                   # update editor window
 
                 end
                 GRID_WINDOW.refresh
@@ -279,6 +287,13 @@ begin
                             EVALUATED_GRID.place(cur_address, nil)
                             error_window.close
 
+                            GRID_WINDOW.setpos(cur_line, cur_col)                   # enter current cell
+                            GRID_WINDOW.addstr(' '*9)                               # clear cell contents
+                            GRID_WINDOW.refresh                                     # update grid window
+
+                            EDITOR_WINDOW.setpos(0, 0)                              # Enter editor window
+                            EDITOR_WINDOW.clear                                     # clear editor window
+                            EDITOR_WINDOW.refresh                                   # update editor window
         
                         end
                     else
