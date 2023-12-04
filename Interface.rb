@@ -37,7 +37,7 @@ begin
     CELL_MAX_LEN = 9                    # max total displayed chars in a cell;    used for rendering cell contents variably
     MIN_LINE = 5            # minimum cell y value in the window; used for out-of-bounds checks when navigating the grid
     MIN_COL = 1             # minumum cell x value in the window; used for out-of-bounds checks when navigating the grid
-    LOCATION_COL = 28
+    LOCATION_COL = 28       # col of the end of the LOCATION_PROMPT; used for updateing cur_address display
 
     # variables
     cur_line = 5        # starting line of the [0,0] cell
@@ -46,7 +46,7 @@ begin
     cur_address = [0,0] # x, y coords; inverted from how curses deals with it
     cur_contents = ""   # contents of [0,0] is empty at init
     UNEVALUATED_GRID = Grid.new     # unevaluated grid
-    EVALUATED_GRID = Grid.new       # evaluated grid + enviornment is based on the evaluateddeclaration
+    EVALUATED_GRID = Grid.new       # evaluated grid + enviornment is based on the evaluated declaration
     env = Environment.new(EVALUATED_GRID)
     parser = Parser.new # parser
 
