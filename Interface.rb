@@ -20,7 +20,7 @@ begin
     curs_set(2)
 
     # constants
-    INSTRUCTIONS_PROMPT = "\'W/A/S/D\' to navigate | \'Enter\' to edit | \'Backspace\' to delete | \'Escape\' to exit"
+    INSTRUCTIONS_PROMPT = "\'W/A/S/D\' to navigate | \'Enter\' to edit | \'Backspace\' to delete | \'Escape\' to exit program or cancel edit"
     LOCATION_PROMPT = "You are currently in Cell: "
     EDITOR_LINES = 3                                    # height of the EDITOR_WINDOW
     GRID_LINES = (lines - EDITOR_LINES) / 3 * 3 + 2     # height of the GRID_WINDOW
@@ -37,8 +37,7 @@ begin
     CELL_MAX_LEN = 9                    # max total displayed chars in a cell;    used for rendering cell contents variably
     MIN_LINE = 5            # minimum cell y value in the window; used for out-of-bounds checks when navigating the grid
     MIN_COL = 1             # minumum cell x value in the window; used for out-of-bounds checks when navigating the grid
-    LOCATION_LINE = GRID_LINES
-    LCOATION_COL = LOCATION_PROMPT.length
+    LOCATION_COL = 28
 
     # variables
     cur_line = 5        # starting line of the [0,0] cell
@@ -71,6 +70,8 @@ begin
             GRID_WINDOW.addstr('─────────┬'*CELL_NUM_COLS)
             GRID_WINDOW.setpos(i, CELL_NUM_COLS*CELL_WIDTH)
             GRID_WINDOW.addch('┐')
+            GRID_WINDOW.setpos(i - 1, 0)
+            GRID_WINDOW.addstr(LOCATION_PROMPT)
             
         elsif i + 1 == GRID_LINES       # bottom row
             GRID_WINDOW.setpos(i, 0)
@@ -79,8 +80,6 @@ begin
             GRID_WINDOW.setpos(i, CELL_NUM_COLS*CELL_WIDTH)
             GRID_WINDOW.addch('┘')
             GRID_WINDOW.setpos(i + 1, 0)
-            GRID_WINDOW.addstr(LOCATION_PROMPT)
-            GRID_WINDOW.setpos(i + 2, 0)
             GRID_WINDOW.addstr(INSTRUCTIONS_PROMPT)
             
         elsif (i-1) % 3 == 0            # all intermediate deliniator rows
@@ -110,10 +109,6 @@ begin
 
                 GRID_WINDOW.setpos(render_line, render_col)             # enter current cell
                 GRID_WINDOW.addstr(' '*9)                               # clear cell contents before attempting to update
-                GRID_WINDOW.setpos(LOCATION_LINE, LCOATION_COL)         # go to bottom right of screen
-                GRID_WINDOW.addstr(' '*9)                               # clear previous address
-                GRID_WINDOW.setpos(LOCATION_LINE, LCOATION_COL)         # go back
-                GRID_WINDOW.addstr("#{cur_address}")                    # display cur_address
                 GRID_WINDOW.refresh                                     # update grid window
 
                 EDITOR_WINDOW.setpos(0, 0)                              # Enter editor window
@@ -210,6 +205,10 @@ begin
 
         GRID_WINDOW.setpos(cur_line, cur_col)                   # enter current cell
         GRID_WINDOW.addstr(' '*9)                               # clear cell contents before attempting to update
+        GRID_WINDOW.setpos(EDITOR_LINES, LOCATION_COL)          # go to the end of the location prompt
+        GRID_WINDOW.addstr(' '*9)                               # clear previous cur_address display
+        GRID_WINDOW.setpos(EDITOR_LINES, LOCATION_COL)          # go back to print the location
+        GRID_WINDOW.addstr("#{cur_address}")                    # update cur_address display
         GRID_WINDOW.refresh                                     # update grid window
 
         EDITOR_WINDOW.setpos(0, 0)                              # Enter editor window
@@ -426,6 +425,10 @@ begin
                     EDITOR_WINDOW.refresh
 
                 end
+            end
+
+            if (cur_char == ESCAPE)
+                cur_char = -1
             end
 
             GRID_WINDOW.setpos(cur_line, cur_col)           # set cursor to top left of the cell
