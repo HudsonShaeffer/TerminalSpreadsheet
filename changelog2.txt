@@ -5,4 +5,4 @@
 11/26 - added zero-division catching in the divide evaluate function
 
 ==== Coding Challenges ====
-2 grids, one evaluated one unevaluated
+2 grids, one evaluated one unevaluated 
